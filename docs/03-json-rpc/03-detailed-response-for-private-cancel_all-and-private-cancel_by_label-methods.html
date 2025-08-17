@@ -1,0 +1,69 @@
+<h2 id="detailed-response-for-private-cancel_all-and-private-cancel_by_label-methods">Detailed response for <code>private/cancel_all*</code> and <code>private/cancel_by_label</code> methods</h2>
+<blockquote>
+<p>An example of a positive execution of cancellation trigger orders in ETH-PERPETUAL when one order was cancelled:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trigger"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH-PERPETUAL"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="nl">"web"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"triggered"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"trigger_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">1628.7</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"trigger"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last_price"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"time_in_force"</span><span class="p">:</span><span class="w"> </span><span class="s2">"good_til_cancelled"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"replaced"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"reduce_only"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"market_price"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"post_only"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"order_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stop_market"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"order_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"untriggered"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH-SLTS-250756"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"max_show"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"last_update_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1634206091071</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"is_rebalance"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"is_liquidation"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH-PERPETUAL"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sell"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"creation_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1634206000230</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"api"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>When boolean parameter <code>detailed</code> with value <code>true</code> is added to <code>cancel_all*</code> or <code>cancel_by_label</code> methods response format
+is changed. Instead of the number of cancelled orders there is a returned list of execution reports objects for every requested instrument, order type and currency: 
+results of positive or erroneous execution. It is done this way because internally during processing 
+cancel_all request there are done separate requests for every currency, order type and book.</p>
+<h3 id="positive-execution-report">Positive execution report</h3>
+<aside class="notice">
+It is returned only when there were orders that were cancelled!
+</aside>
+<p>Positive execution report is object with fields:
+</p><ul>
+<li><code>currency</code></li>
+<li><code>type</code> - <code>trigger</code> or <code>limit</code></li>
+<li><code>instrument_name</code></li>
+<li><code>result</code> - array of orders formatted like in <code>private/cancel</code> response</li>
+</ul>
+<h3 id="erroneous-execution-report">Erroneous execution report</h3>
+<p>Erroneous execution report is object with fields:
+</p><ul>
+<li><code>currency</code></li>
+<li><code>type</code> - <code>trigger</code> or <code>limit</code></li>
+<li><code>instrument_name</code> - it is attached only if the error is related to specific instrument</li>
+<li><code>error</code> - error message formatted as usual</li>
+</ul>
+<blockquote>
+<p>An example of information that cancel of limit orders in ETH failed:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"limit"</span><span class="p">,</span><span class="w"> 
+  </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"matching_engine_queue_full"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">10047</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>

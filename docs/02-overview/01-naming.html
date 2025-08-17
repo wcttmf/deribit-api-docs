@@ -1,0 +1,29 @@
+<h2 id="naming">Naming</h2>
+<p>Deribit tradeable assets or instruments use the following system of naming:</p>
+<table><thead>
+<tr>
+<th>Kind</th>
+<th>Examples</th>
+<th>Template</th>
+<th>Comments</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Future</td>
+<td><code>BTC-25MAR23</code>, <code>BTC-5AUG23</code></td>
+<td><code>BTC-DMMMYY</code></td>
+<td><code>BTC</code> is currency, <code>DMMMYY</code> is expiration date, <code>D</code> stands for day of month (1 or 2 digits), <code>MMM</code> - month (3 first letters in English), <code>YY</code> stands for year.</td>
+</tr>
+<tr>
+<td>Perpetual</td>
+<td><code>BTC-PERPETUAL</code></td>
+<td></td>
+<td>Perpetual contract for currency <code>BTC</code>.</td>
+</tr>
+<tr>
+<td>Option</td>
+<td><code>BTC-25MAR23-420-C</code>, <code>BTC-5AUG23-580-P</code></td>
+<td><code>BTC-DMMMYY-STRIKE-K</code></td>
+<td><code>STRIKE</code> is option strike price in USD. Template <code>K</code> is option kind: <code>C</code> for call options or <code>P</code> for put options. <p><b>In Linear Options <code>d</code> is used as a decimal point for decimal strikes.</b></p><p><b>Example: </b>For <code>XRP_USDC-30JUN23-0d625-C</code> strike is 0.625.</p></td>
+</tr>
+</tbody></table>

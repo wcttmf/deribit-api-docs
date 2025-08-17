@@ -1,0 +1,457 @@
+<h2 id="private-get_transaction_log">/private/get_transaction_log</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/get_transaction_log?count=5&amp;currency=BTC&amp;end_timestamp=1613660407000&amp;start_timestamp=1613657734000"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+<span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">private/get_transaction_log</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:{</span><span class="dl">"</span><span class="s2">count</span><span class="dl">"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">end_timestamp</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1613660407000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">start_timestamp</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1613657734000</span><span class="dl">"</span><span class="p">}};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// ------------------- </span>
+    <span class="c1">// Before sending message, make sure that your connection</span>
+    <span class="c1">// is authenticated (use public/auth call before) </span>
+    <span class="c1">// ------------------- </span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+<span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="s">"jsonrpc"</span><span class="p">:</span><span class="s">"2.0"</span><span class="p">,</span><span class="s">"method"</span><span class="p">:</span><span class="s">"private/get_transaction_log"</span><span class="p">,</span><span class="s">"params"</span><span class="p">:{</span><span class="s">"count"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="s">"currency"</span><span class="p">:</span><span class="s">"BTC"</span><span class="p">,</span><span class="s">"end_timestamp"</span><span class="p">:</span><span class="s">"1613660407000"</span><span class="p">,</span><span class="s">"start_timestamp"</span><span class="p">:</span><span class="s">"1613657734000"</span><span class="p">}}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="c1">###############
+</span>       <span class="c1"># Before sending message, make sure that your connection
+</span>       <span class="c1"># is authenticated (use public/auth call before) 
+</span>       <span class="c1">###############
+</span>       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"logs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TestUser"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_seq"</span><span class="p">:</span><span class="w"> </span><span class="mi">6009</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"transfer"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"trade_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1613659830333</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"position"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"interest_pl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"transfer_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"subaccount"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"other_user_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"other_user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Subaccount"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">61312</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"equity"</span><span class="p">:</span><span class="w"> </span><span class="mf">3000.9275869</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"commission"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"change"</span><span class="p">:</span><span class="w"> </span><span class="mf">-2.5</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cashflow"</span><span class="p">:</span><span class="w"> </span><span class="mf">-2.5</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">3001.22270418</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TestUser"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_seq"</span><span class="p">:</span><span class="w"> </span><span class="mi">6008</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"settlement"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"trade_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"total_interest_pl"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00001243</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1613659544153</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"long"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"session_upl"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00220172</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"session_rpl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.00004467</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">51807.07</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"position"</span><span class="p">:</span><span class="w"> </span><span class="mi">1520</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"interest_pl"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000993</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-PERPETUAL"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"settlement_price"</span><span class="p">:</span><span class="w"> </span><span class="mi">51807</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"floating_pl"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00220172</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">61311</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"equity"</span><span class="p">:</span><span class="w"> </span><span class="mf">3003.42821428</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"commission"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"change"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00215706</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cashflow"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00215706</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">3003.72270418</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1520</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TestUser"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_seq"</span><span class="p">:</span><span class="w"> </span><span class="mi">6007</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"deposit"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"trade_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1613657828414</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"position"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"interest_pl"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"transaction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"de6eba075855f32c9510f338d3ca0900376cedcb9f7b142caccfbdc292d3237e"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"deposit_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wallet"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"addr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2N8prMvpZHr8aYqodX3S4yhz5wMxjY8La3p"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">61291</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"equity"</span><span class="p">:</span><span class="w"> </span><span class="mf">3003.4876111</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"commission"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"change"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.65</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cashflow"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.65</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">3003.72054712</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TestUser"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_seq"</span><span class="p">:</span><span class="w"> </span><span class="mi">6006</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"maker"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"ip"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11.222.33.44"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"trade_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"28349"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1613657734620</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open buy"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"profit_as_cashflow"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1537</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"position"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.7</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"67546"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.04884653215049635</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"interest_pl"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-19FEB21-49200-C"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"info"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Source: api"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">61289</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"equity"</span><span class="p">:</span><span class="w"> </span><span class="mf">3002.83270455</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"commission"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"change"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.10759</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cashflow"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.10759</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">3003.07054712</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.7</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TestUser"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_seq"</span><span class="p">:</span><span class="w"> </span><span class="mi">6005</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"maker"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"user_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"trade"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"trade_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"28349"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1613657734620</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"close buy"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"profit_as_cashflow"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1537</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"position"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"67546"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.04884653215049635</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"interest_pl"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-19FEB21-49200-C"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"info"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Source: api"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">61288</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"equity"</span><span class="p">:</span><span class="w"> </span><span class="mf">3002.83270455</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"commission"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"change"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.04611</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cashflow"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.04611</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">3003.17813712</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"continuation"</span><span class="p">:</span><span class="w"> </span><span class="mi">61282</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Retrieve the latest user trades that have occurred for a specific instrument and within a given time range.</p>
+<p><strong>📖 Related Support Article:</strong> <a href="https://support.deribit.com/hc/en-us/articles/25944587269021-Transaction-log">Transaction log</a></p>
+<p><strong>Scope: </strong> <code>account:read</code></p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_transaction_log" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div></aside>
+<h3 id="parameters-161">Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency</td>
+<td>true</td>
+<td>string</td>
+<td><code>BTC</code><br/><code>ETH</code><br/><code>STETH</code><br/><code>ETHW</code><br/><code>USDC</code><br/><code>USDT</code><br/><code>EURR</code><br/><code>MATIC</code><br/><code>SOL</code><br/><code>XRP</code><br/><code>USYC</code><br/><code>PAXG</code><br/><code>BNB</code><br/><code>USDE</code></td>
+<td>The currency symbol</td>
+</tr>
+<tr>
+<td>start_timestamp</td>
+<td>true</td>
+<td>integer</td>
+<td></td>
+<td>The earliest timestamp to return result from (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>end_timestamp</td>
+<td>true</td>
+<td>integer</td>
+<td></td>
+<td>The most recent timestamp to return result from (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>query</td>
+<td>false</td>
+<td>string</td>
+<td></td>
+<td>The following keywords can be used to filter the results: <code>trade</code>, <code>maker</code>, <code>taker</code>, <code>open</code>, <code>close</code>, <code>liquidation</code>, <code>buy</code>, <code>sell</code>, <code>withdrawal</code>, <code>delivery</code>, <code>settlement</code>, <code>deposit</code>, <code>transfer</code>, <code>option</code>, <code>future</code>, <code>correction</code>, <code>block_trade</code>, <code>swap</code>. Plus withdrawal or transfer addresses</td>
+</tr>
+<tr>
+<td>count</td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+<td>Number of requested items, default - <code>100</code></td>
+</tr>
+<tr>
+<td>subaccount_id</td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+<td>Id of a subaccount</td>
+</tr>
+<tr>
+<td>continuation</td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+<td>Continuation token for pagination</td>
+</tr>
+</tbody></table>
+<h3 id="response-161">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The id that was sent in the request</td>
+</tr>
+<tr>
+<td>jsonrpc</td>
+<td>string</td>
+<td>The JSON-RPC version (2.0)</td>
+</tr>
+<tr>
+<td>result</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  continuation</td>
+<td>integer</td>
+<td>Continuation token for pagination. <code>NULL</code> when no continuation.</td>
+</tr>
+<tr>
+<td>  ›  logs</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  change</td>
+<td>number</td>
+<td>Change in cash balance. For trades: fees and options premium paid/received. For settlement: Futures session PNL and perpetual session funding.</td>
+</tr>
+<tr>
+<td>  ›    ›  cashflow</td>
+<td>number</td>
+<td>For futures and perpetual contracts: Realized session PNL (since last settlement). For options: the amount paid or received for the options traded.</td>
+</tr>
+<tr>
+<td>  ›    ›  user_id</td>
+<td>integer</td>
+<td>Unique user identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  trade_id</td>
+<td>string</td>
+<td>Unique (per currency) trade identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  type</td>
+<td>string</td>
+<td>Transaction category/type. The most common are: <code>trade</code>, <code>deposit</code>, <code>withdrawal</code>, <code>settlement</code>, <code>delivery</code>, <code>transfer</code>, <code>swap</code>, <code>correction</code>. New types can be added any time in the future</td>
+</tr>
+<tr>
+<td>  ›    ›  order_id</td>
+<td>string</td>
+<td>Unique order identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  position</td>
+<td>number</td>
+<td>Updated position size after the transaction</td>
+</tr>
+<tr>
+<td>  ›    ›  side</td>
+<td>string</td>
+<td>One of: <code>short</code> or <code>long</code> in case of settlements, <code>close sell</code> or <code>close buy</code> in case of deliveries, <code>open sell</code>, <code>open buy</code>, <code>close sell</code>, <code>close buy</code> in case of trades</td>
+</tr>
+<tr>
+<td>  ›    ›  contracts</td>
+<td>number</td>
+<td>It represents the order size in contract units. (Optional, may be absent in historical data).</td>
+</tr>
+<tr>
+<td>  ›    ›  interest_pl</td>
+<td>number</td>
+<td>Actual funding rate of trades and settlements on perpetual instruments</td>
+</tr>
+<tr>
+<td>  ›    ›  user_role</td>
+<td>string</td>
+<td>Trade role of the user: <code>maker</code> or <code>taker</code></td>
+</tr>
+<tr>
+<td>  ›    ›  fee_role</td>
+<td>string</td>
+<td>Fee role of the user: <code>maker</code> or <code>taker</code>. Can be different from trade role of the user when iceberg order was involved in matching.</td>
+</tr>
+<tr>
+<td>  ›    ›  id</td>
+<td>integer</td>
+<td>Unique identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  index_price</td>
+<td>number</td>
+<td>The index price for the instrument during the delivery</td>
+</tr>
+<tr>
+<td>  ›    ›  info</td>
+<td>object</td>
+<td>Additional information regarding transaction. Strongly dependent on the log entry type</td>
+</tr>
+<tr>
+<td>  ›    ›  currency</td>
+<td>string</td>
+<td>Currency, i.e <code>"BTC"</code>, <code>"ETH"</code>, <code>"USDC"</code></td>
+</tr>
+<tr>
+<td>  ›    ›  price</td>
+<td>number</td>
+<td>Settlement/delivery price or the price level of the traded contracts</td>
+</tr>
+<tr>
+<td>  ›    ›  user_seq</td>
+<td>integer</td>
+<td>Sequential identifier of user transaction</td>
+</tr>
+<tr>
+<td>  ›    ›  settlement_price</td>
+<td>number</td>
+<td>The settlement price for the instrument during the delivery</td>
+</tr>
+<tr>
+<td>  ›    ›  price_currency</td>
+<td>string</td>
+<td>Currency symbol associated with the <code>price</code> field value</td>
+</tr>
+<tr>
+<td>  ›    ›  equity</td>
+<td>number</td>
+<td>Updated equity value after the transaction</td>
+</tr>
+<tr>
+<td>  ›    ›  total_interest_pl</td>
+<td>number</td>
+<td>Total session funding rate</td>
+</tr>
+<tr>
+<td>  ›    ›  balance</td>
+<td>number</td>
+<td>Cash balance after the transaction</td>
+</tr>
+<tr>
+<td>  ›    ›  session_upl</td>
+<td>number</td>
+<td>Session unrealized profit and loss</td>
+</tr>
+<tr>
+<td>  ›    ›  timestamp</td>
+<td>integer</td>
+<td>The timestamp (milliseconds since the Unix epoch)</td>
+</tr>
+<tr>
+<td>  ›    ›  profit_as_cashflow</td>
+<td>boolean</td>
+<td>Indicator informing whether the cashflow is waiting for settlement or not</td>
+</tr>
+<tr>
+<td>  ›    ›  commission</td>
+<td>number</td>
+<td>Commission paid so far (in base currency)</td>
+</tr>
+<tr>
+<td>  ›    ›  session_rpl</td>
+<td>number</td>
+<td>Session realized profit and loss</td>
+</tr>
+<tr>
+<td>  ›    ›  mark_price</td>
+<td>number</td>
+<td>Market price during the trade</td>
+</tr>
+<tr>
+<td>  ›    ›  block_rfq_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ - when trade was part of the Block RFQ</td>
+</tr>
+<tr>
+<td>  ›    ›  ip</td>
+<td>string</td>
+<td>The IP address from which the trade was initiated</td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>number</td>
+<td>It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>  ›    ›  username</td>
+<td>string</td>
+<td>System name or user defined subaccount alias</td>
+</tr>
+<tr>
+<td>  ›    ›  instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+</tbody></table>

@@ -1,0 +1,112 @@
+<h2 id="public-get_supported_index_names">/public/get_supported_index_names</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/public/get_supported_index_names?type=all"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+    <span class="p">{</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">public/get_supported_index_names</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">all</span><span class="dl">"</span><span class="p">}</span>
+    <span class="p">};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="p">:</span> <span class="s">"2.0"</span><span class="p">,</span>
+     <span class="s">"method"</span><span class="p">:</span> <span class="s">"public/get_supported_index_names"</span><span class="p">,</span>
+     <span class="s">"id"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="s">"params"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">"type"</span><span class="p">:</span> <span class="s">"all"</span><span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">25718</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"btc_eth"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"btc_usdc"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"eth_usdc"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div>
+<p>Retrieves the identifiers of all supported Price Indexes</p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fpublic%2Fget_supported_index_names" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<h3 id="parameters-46">Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td>false</td>
+<td>string</td>
+<td><code>all</code><br/><code>spot</code><br/><code>derivative</code></td>
+<td>Type of a cryptocurrency price index</td>
+</tr>
+</tbody></table>
+<h3 id="response-46">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The id that was sent in the request</td>
+</tr>
+<tr>
+<td>jsonrpc</td>
+<td>string</td>
+<td>The JSON-RPC version (2.0)</td>
+</tr>
+<tr>
+<td>result</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  future_combo_creation_enabled</td>
+<td>boolean</td>
+<td>Whether future combo creation is enabled for this index (only present when <code>extended</code>=<code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  name</td>
+<td>string</td>
+<td>Index name</td>
+</tr>
+<tr>
+<td>  ›  option_combo_creation_enabled</td>
+<td>boolean</td>
+<td>Whether option combo creation is enabled for this index (only present when <code>extended</code>=<code>true</code>)</td>
+</tr>
+</tbody></table>

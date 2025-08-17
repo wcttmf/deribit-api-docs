@@ -1,0 +1,11 @@
+<h2 id="rate-limits">Rate Limits</h2>
+<p>Rate limits are described in <a href="https://support.deribit.com/hc/en-us/articles/25944617523357-Rate-Limits">separate document</a>.</p>
+<h1 id="json-rpc">JSON-RPC</h1>
+<p>JSON-RPC is a light-weight remote procedure call (RPC) protocol. The 
+<a href="https://www.jsonrpc.org/specification">JSON-RPC specification</a> defines the data
+structures that are used for the messages that are exchanged between client
+and server, as well as the rules around their processing. JSON-RPC uses
+JSON (RFC 4627) as data format.</p>
+<p>JSON-RPC is transport agnostic: it does not specify which transport
+mechanism must be used. The Deribit API supports both Websocket (preferred)
+and HTTP (with limitations: subscriptions are not supported over HTTP).</p>

@@ -1,0 +1,407 @@
+<h2 id="private-cancel_block_rfq">/private/cancel_block_rfq</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/cancel_block_rfq?block_rfq_id=366"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+<span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">private/cancel_block_rfq</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:{</span><span class="dl">"</span><span class="s2">block_rfq_id</span><span class="dl">"</span><span class="p">:</span><span class="mi">366</span><span class="p">}};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// ------------------- </span>
+    <span class="c1">// Before sending message, make sure that your connection</span>
+    <span class="c1">// is authenticated (use public/auth call before) </span>
+    <span class="c1">// ------------------- </span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+<span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s">"jsonrpc"</span><span class="p">:</span><span class="s">"2.0"</span><span class="p">,</span><span class="s">"method"</span><span class="p">:</span><span class="s">"private/cancel_block_rfq"</span><span class="p">,</span><span class="s">"params"</span><span class="p">:{</span><span class="s">"block_rfq_id"</span><span class="p">:</span><span class="mi">366</span><span class="p">}}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="c1">###############
+</span>       <span class="c1"># Before sending message, make sure that your connection
+</span>       <span class="c1"># is authenticated (use public/auth call before) 
+</span>       <span class="c1">###############
+</span>       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"creation_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1729855159611</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"block_rfq_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">366</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"expiration_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1729855459611</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"taker"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"asks"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="nl">"bids"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="nl">"makers"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">100000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"legs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-1NOV24"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sell"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-PERPETUAL"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"buy"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"combo_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-FS-1NOV24_PERP"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cancelled"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p><b>Taker method</b> </p><p>This method cancels a Block RFQ using the specified <code>block_rfq_id</code>.</p>
+<p><strong>Scope: </strong> <code>block_rfq:read_write</code></p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcancel_block_rfq" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div></aside>
+<h3 id="parameters-110">Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>block_rfq_id</td>
+<td>true</td>
+<td>integer</td>
+<td></td>
+<td>ID of the Block RFQ</td>
+</tr>
+</tbody></table>
+<h3 id="response-110">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The id that was sent in the request</td>
+</tr>
+<tr>
+<td>jsonrpc</td>
+<td>string</td>
+<td>The JSON-RPC version (2.0)</td>
+</tr>
+<tr>
+<td>result</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  amount</td>
+<td>number</td>
+<td>This value multiplied by the ratio of a leg gives trade size on that leg.</td>
+</tr>
+<tr>
+<td>  ›  app_name</td>
+<td>string</td>
+<td>The name of the application that created the Block RFQ on behalf of the user (optional, visible only to taker).</td>
+</tr>
+<tr>
+<td>  ›  asks</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>number</td>
+<td>This value multiplied by the ratio of a leg gives trade size on that leg.</td>
+</tr>
+<tr>
+<td>  ›    ›  execution_instruction</td>
+<td>string</td>
+<td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p><ul><li><code>"all_or_none (AON)"</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level.</li><li><code>"any_part_of (APO)"</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li></ul></td>
+</tr>
+<tr>
+<td>  ›    ›  expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
+</tr>
+<tr>
+<td>  ›    ›  last_update_timestamp</td>
+<td>integer</td>
+<td>Timestamp of the last update of the quote (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>  ›    ›  makers</td>
+<td>array of string</td>
+<td>Maker of the quote</td>
+</tr>
+<tr>
+<td>  ›    ›  price</td>
+<td>number</td>
+<td>Price of a quote</td>
+</tr>
+<tr>
+<td>  ›  bids</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>number</td>
+<td>This value multiplied by the ratio of a leg gives trade size on that leg.</td>
+</tr>
+<tr>
+<td>  ›    ›  execution_instruction</td>
+<td>string</td>
+<td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p><ul><li><code>"all_or_none (AON)"</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level.</li><li><code>"any_part_of (APO)"</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li></ul></td>
+</tr>
+<tr>
+<td>  ›    ›  expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
+</tr>
+<tr>
+<td>  ›    ›  last_update_timestamp</td>
+<td>integer</td>
+<td>Timestamp of the last update of the quote (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>  ›    ›  makers</td>
+<td>array of string</td>
+<td>Maker of the quote</td>
+</tr>
+<tr>
+<td>  ›    ›  price</td>
+<td>number</td>
+<td>Price of a quote</td>
+</tr>
+<tr>
+<td>  ›  block_rfq_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ</td>
+</tr>
+<tr>
+<td>  ›  combo_id</td>
+<td>string</td>
+<td>Unique combo identifier</td>
+</tr>
+<tr>
+<td>  ›  creation_timestamp</td>
+<td>integer</td>
+<td>The timestamp when Block RFQ was created (milliseconds since the Unix epoch)</td>
+</tr>
+<tr>
+<td>  ›  disclosed</td>
+<td>boolean</td>
+<td>Indicates whether the RFQ was created as non-anonymous, meaning taker and maker aliases are visible to counterparties.</td>
+</tr>
+<tr>
+<td>  ›  expiration_timestamp</td>
+<td>integer</td>
+<td>The timestamp when the Block RFQ will expire (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>  ›  hedge</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>integer</td>
+<td>It represents the requested hedge leg size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>  ›    ›  direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>  ›    ›  instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  price</td>
+<td>number</td>
+<td>Price for a hedge leg</td>
+</tr>
+<tr>
+<td>  ›  included_in_taker_rating</td>
+<td>boolean</td>
+<td>Indicates whether the RFQ is included in the taker's rating calculation. Present only for closed RFQs created by the requesting taker.</td>
+</tr>
+<tr>
+<td>  ›  index_prices</td>
+<td>array of number</td>
+<td>A list of index prices for the underlying instrument(s) at the time of trade execution.</td>
+</tr>
+<tr>
+<td>  ›  label</td>
+<td>string</td>
+<td>User defined label for the Block RFQ (maximum 64 characters)</td>
+</tr>
+<tr>
+<td>  ›  legs</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>  ›    ›  instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  ratio</td>
+<td>integer</td>
+<td>Ratio of amount between legs</td>
+</tr>
+<tr>
+<td>  ›  makers</td>
+<td>array of string</td>
+<td>List of targeted Block RFQ makers</td>
+</tr>
+<tr>
+<td>  ›  mark_price</td>
+<td>number</td>
+<td>The mark price for the instrument</td>
+</tr>
+<tr>
+<td>  ›  min_trade_amount</td>
+<td>number</td>
+<td>Minimum amount for trading</td>
+</tr>
+<tr>
+<td>  ›  role</td>
+<td>string</td>
+<td>Role of the user in Block RFQ</td>
+</tr>
+<tr>
+<td>  ›  state</td>
+<td>string</td>
+<td>State of the Block RFQ</td>
+</tr>
+<tr>
+<td>  ›  taker</td>
+<td>string</td>
+<td>Taker alias. Present only when <code>disclosed</code> is <code>true</code>.</td>
+</tr>
+<tr>
+<td>  ›  taker_rating</td>
+<td>string</td>
+<td>Rating of the taker</td>
+</tr>
+<tr>
+<td>  ›  trade_allocations</td>
+<td>array of <em>object</em></td>
+<td>List of allocations for Block RFQ pre-allocation. Allows to split amount between different (sub)accounts or broker clients. Each allocation must specify either <code>user_id</code> (for direct allocation) or <code>client_info</code> object (for broker allocation), and amount. Visible only to the taker.</td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>number</td>
+<td>Amount allocated to this user or client.</td>
+</tr>
+<tr>
+<td>  ›    ›  client_info</td>
+<td><em>object</em></td>
+<td>Client allocation info for brokers.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  client_id</td>
+<td>integer</td>
+<td>ID of a client; available to broker. Represents a group of users under a common name.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  client_link_id</td>
+<td>integer</td>
+<td>ID assigned to a single user in a client; available to broker.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  name</td>
+<td>string</td>
+<td>Name of the linked user within the client; available to broker.</td>
+</tr>
+<tr>
+<td>  ›    ›  user_id</td>
+<td>integer</td>
+<td>User ID to allocate part of the RFQ amount. For brokers the User ID is obstructed.</td>
+</tr>
+<tr>
+<td>  ›  trade_trigger</td>
+<td><em>object</em></td>
+<td>Contains information about the trade trigger state</td>
+</tr>
+<tr>
+<td>  ›    ›  cancel_reason</td>
+<td>string</td>
+<td>Reason for cancellation, present only when state is cancelled</td>
+</tr>
+<tr>
+<td>  ›    ›  direction</td>
+<td>string</td>
+<td>Direction of the trade trigger</td>
+</tr>
+<tr>
+<td>  ›    ›  price</td>
+<td>number</td>
+<td>Price of the trade trigger</td>
+</tr>
+<tr>
+<td>  ›    ›  state</td>
+<td>string</td>
+<td>Trade trigger state: <code>"untriggered"</code> or <code>"cancelled"</code></td>
+</tr>
+<tr>
+<td>  ›  trades</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>number</td>
+<td>Trade amount. For options, linear futures, linear perpetuals and spots the amount is denominated in the underlying base currency coin. The inverse perpetuals and inverse futures are denominated in USD units.</td>
+</tr>
+<tr>
+<td>  ›    ›  direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>  ›    ›  hedge_amount</td>
+<td>number</td>
+<td>Amount of the hedge leg. For linear futures, linear perpetuals and spots the amount is denominated in the underlying base currency coin. The inverse perpetuals and inverse futures are denominated in USD units.</td>
+</tr>
+<tr>
+<td>  ›    ›  maker</td>
+<td>string</td>
+<td>Alias of the maker (optional)</td>
+</tr>
+<tr>
+<td>  ›    ›  price</td>
+<td>number</td>
+<td>Price in base currency</td>
+</tr>
+</tbody></table>

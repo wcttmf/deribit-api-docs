@@ -1,0 +1,81 @@
+<h2 id="access-scope">Access scope</h2>
+<p>When asking for <code>access token</code>, the user can provide the required access level (called <code>scope</code>) which defines
+what type of functionality he/she wants to use, and whether requests are only going to check for some data or
+also to update them. 
+Scopes are required and checked for <code>private</code> methods, so if you plan to use only <code>public</code> information you
+can stay with values assigned by default.</p>
+<p><strong>📖 Related Support Article:</strong> <a href="https://support.deribit.com/hc/en-us/articles/25944603459613-Connection-Management">Connection Management</a></p>
+<table><thead>
+<tr>
+<th>Scope</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><em>mainaccount</em></td>
+<td>It is set <strong>automatically</strong> by the server when the currently connecting user (his/her credentials) is the main user, otherwise it's not included in the final scope.</td>
+</tr>
+<tr>
+<td><em>connection</em></td>
+<td>Access with requested parameters is granted when connection is open (or till expiration time). When the connection is closed, user need to repeat the authentication request to get new tokens. It is set and used automatically by the server when neither <strong>connection</strong> nor <strong>session</strong> scope is provided within the request.</td>
+</tr>
+<tr>
+<td><em>session:name</em></td>
+<td>The server creates a new session with the <em>name</em> provided by the user, then generates tokens and binds them with the session. Access is granted during session lifetime. It allows users to reconnect to the server and reuse assigned tokens (before their expiration time). Note that only 16 sessions are allowed per user - when the limit is reached, the session with the shortest lifetime is removed. When using <strong>WebSocket</strong> it also allows (due to the fact that tokens are bound to the created session) skipping providing <code>access_token</code> with every subsequent request.</td>
+</tr>
+<tr>
+<td><em>account:read</em></td>
+<td>Access to <strong>account</strong> methods - read only data.</td>
+</tr>
+<tr>
+<td><em>account:read_write</em></td>
+<td>Access to <strong>account</strong> methods - allows to manage account settings, add subaccounts, etc.</td>
+</tr>
+<tr>
+<td><em>trade:read</em></td>
+<td>Access to <strong>trade</strong> methods - read only data.</td>
+</tr>
+<tr>
+<td><em>trade:read_write</em></td>
+<td>Access to <strong>trade</strong> methods - required to create and modify orders.</td>
+</tr>
+<tr>
+<td><em>wallet:read</em></td>
+<td>Access to <strong>wallet</strong> methods - read only data.</td>
+</tr>
+<tr>
+<td><em>wallet:read_write</em></td>
+<td>Access to <strong>wallet</strong> methods - allows to withdraw, generate new deposit address, etc.</td>
+</tr>
+<tr>
+<td><em>wallet:none</em>, <em>account:none</em>, <em>trade:none</em></td>
+<td>Blocked access to specified functionality.</td>
+</tr>
+<tr>
+<td><em>expires:NUMBER</em></td>
+<td><strong>Access token</strong> will expire after <code>NUMBER</code> of seconds.</td>
+</tr>
+<tr>
+<td><em>ip:ADDR</em></td>
+<td>Token will work with connection from <code>ADDR</code> IPv4 address, when <code>*</code> is provided as an <code>ADDR</code> token will work from all IP addresses.</td>
+</tr>
+<tr>
+<td><em>block_trade:read</em></td>
+<td>Access to <strong>block_trade</strong> methods - reading info about block trades - read only data.</td>
+</tr>
+<tr>
+<td><em>block_trade:read_write</em></td>
+<td>Access to <strong>block_trade</strong> methods - required to create block trades.</td>
+</tr>
+<tr>
+<td><em>block_rfq:read</em></td>
+<td>Access to <strong>block_rfq</strong> methods - reading info about Block RFQs, quotes and available makers - read only data.</td>
+</tr>
+<tr>
+<td><em>block_rfq:read_write</em></td>
+<td>Access to <strong>block_rfq</strong> methods - required to create and quote Block RFQs.</td>
+</tr>
+</tbody></table>
+<p><span style="color:red"><strong>NOTICE:</strong></span> Depending on choosing an authentication method (<code>grant type</code>) some scopes could be narrowed by the server or limited by user API key configured scope, e.g. when <code>grant_type = client_credentials</code> and <code>scope = wallet:read_write</code> could be modified by the server as <code>scope = wallet:read</code>.
+
+<strong>The user shouldn't assume that requested values are blindly accepted and should verify assigned scopes.</strong></p>

@@ -1,0 +1,1121 @@
+<h2 id="user-trades-kind-currency-interval">user.trades.{kind}.{currency}.{interval}</h2>
+<blockquote>
+<p><em>Subscriptions are only available via websockets.</em></p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// To subscribe to this channel:</span>
+<span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+    <span class="p">{</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">private/subscribe</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">channels</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">user.trades.future.BTC.100ms</span><span class="dl">"</span><span class="p">]}</span>
+    <span class="p">};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the notifications...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># To subscribe to this channel:
+</span><span class="n">msg</span> <span class="o">=</span> \
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="p">:</span> <span class="s">"2.0"</span><span class="p">,</span>
+     <span class="s">"method"</span><span class="p">:</span> <span class="s">"private/subscribe"</span><span class="p">,</span>
+     <span class="s">"id"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="s">"params"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">"channels"</span><span class="p">:</span> <span class="p">[</span><span class="s">"user.trades.future.BTC.100ms"</span><span class="p">]}</span>
+    <span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the notifications...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>This subscription will send next notifications like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="nl">"method"</span><span class="p">:</span><span class="s2">"subscription"</span><span class="p">,</span><span class="nl">"params"</span><span class="p">:{</span><span class="nl">"channel"</span><span class="p">:</span><span class="s2">"user.trades.future.BTC.100ms"</span><span class="p">,</span><span class="nl">"data"</span><span class="p">:[{</span><span class="nl">"amount"</span><span class="p">:</span><span class="mi">8940</span><span class="p">,</span><span class="nl">"direction"</span><span class="p">:</span><span class="s2">"sell"</span><span class="p">,</span><span class="nl">"fee"</span><span class="p">:</span><span class="mf">4.9961e-4</span><span class="p">,</span><span class="nl">"fee_currency"</span><span class="p">:</span><span class="s2">"BTC"</span><span class="p">,</span><span class="nl">"index_price"</span><span class="p">:</span><span class="mf">8953.53</span><span class="p">,</span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="s2">"BTC-25SEP20"</span><span class="p">,</span><span class="nl">"liquidity"</span><span class="p">:</span><span class="s2">"T"</span><span class="p">,</span><span class="nl">"mark_price"</span><span class="p">:</span><span class="mf">8970.03</span><span class="p">,</span><span class="nl">"matching_id"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="nl">"order_id"</span><span class="p">:</span><span class="s2">"4008978075"</span><span class="p">,</span><span class="nl">"order_type"</span><span class="p">:</span><span class="s2">"limit"</span><span class="p">,</span><span class="nl">"post_only"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"price"</span><span class="p">:</span><span class="mi">8947</span><span class="p">,</span><span class="nl">"reduce_only"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"state"</span><span class="p">:</span><span class="s2">"filled"</span><span class="p">,</span><span class="nl">"tick_direction"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1590484255886</span><span class="p">,</span><span class="nl">"trade_id"</span><span class="p">:</span><span class="s2">"48079262"</span><span class="p">,</span><span class="nl">"trade_seq"</span><span class="p">:</span><span class="mi">74405</span><span class="p">}]}}</span><span class="w">
+</span></code></pre></div>
+<p>Get notifications about the user's trades in any instrument of a given kind and given currency.</p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&amp;channels=user.trades.%7Bkind%7D.%7Bcurrency%7D.%7Binterval%7D" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<aside class="multi-notice"><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
+<h3 id="channel-parameters-40">Channel Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>kind</td>
+<td>true</td>
+<td>string</td>
+<td><code>future</code><br/><code>option</code><br/><code>spot</code><br/><code>future_combo</code><br/><code>option_combo</code><br/><code>combo</code><br/><code>any</code></td>
+<td>Instrument kind, <code>"combo"</code> for any combo or <code>"any"</code> for all</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>true</td>
+<td>string</td>
+<td><code>BTC</code><br/><code>ETH</code><br/><code>USDC</code><br/><code>USDT</code><br/><code>EURR</code><br/><code>any</code></td>
+<td>The currency symbol or <code>"any"</code> for all</td>
+</tr>
+<tr>
+<td>interval</td>
+<td>true</td>
+<td>string</td>
+<td><code>agg2</code><br/><code>100ms</code><br/><code>raw</code></td>
+<td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
+</tr>
+</tbody></table>
+<h3 id="response-216">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>data</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  trade_id</td>
+<td>string</td>
+<td>Unique (per currency) trade identifier</td>
+</tr>
+<tr>
+<td>  ›  tick_direction</td>
+<td>integer</td>
+<td>Direction of the "tick" (<code>0</code> = Plus Tick, <code>1</code> = Zero-Plus Tick, <code>2</code> = Minus Tick, <code>3</code> = Zero-Minus Tick).</td>
+</tr>
+<tr>
+<td>  ›  fee_currency</td>
+<td>string</td>
+<td>Currency, i.e <code>"BTC"</code>, <code>"ETH"</code>, <code>"USDC"</code></td>
+</tr>
+<tr>
+<td>  ›  api</td>
+<td>boolean</td>
+<td><code>true</code> if user order was created with API</td>
+</tr>
+<tr>
+<td>  ›  advanced</td>
+<td>string</td>
+<td>Advanced type of user order: <code>"usd"</code> or <code>"implv"</code> (only for options; omitted if not applicable)</td>
+</tr>
+<tr>
+<td>  ›  order_id</td>
+<td>string</td>
+<td>Id of the user order (maker or taker), i.e. subscriber's order id that took part in the trade</td>
+</tr>
+<tr>
+<td>  ›  liquidity</td>
+<td>string</td>
+<td>Describes what was role of users order: <code>"M"</code> when it was maker order, <code>"T"</code> when it was taker order</td>
+</tr>
+<tr>
+<td>  ›  post_only</td>
+<td>string</td>
+<td><code>true</code> if user order is post-only</td>
+</tr>
+<tr>
+<td>  ›  direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>  ›  contracts</td>
+<td>number</td>
+<td>Trade size in contract units (optional, may be absent in historical trades)</td>
+</tr>
+<tr>
+<td>  ›  mmp</td>
+<td>boolean</td>
+<td><code>true</code> if user order is MMP</td>
+</tr>
+<tr>
+<td>  ›  fee</td>
+<td>number</td>
+<td>User's fee in units of the specified <code>fee_currency</code></td>
+</tr>
+<tr>
+<td>  ›  quote_id</td>
+<td>string</td>
+<td>QuoteID of the user order (optional, present only for orders placed with <code>private/mass_quote</code>)</td>
+</tr>
+<tr>
+<td>  ›  index_price</td>
+<td>number</td>
+<td>Index Price at the moment of trade</td>
+</tr>
+<tr>
+<td>  ›  label</td>
+<td>string</td>
+<td>User defined label (presented only when previously set for order by user)</td>
+</tr>
+<tr>
+<td>  ›  block_trade_id</td>
+<td>string</td>
+<td>Block trade id - when trade was part of a block trade</td>
+</tr>
+<tr>
+<td>  ›  price</td>
+<td>number</td>
+<td>Price in base currency</td>
+</tr>
+<tr>
+<td>  ›  combo_id</td>
+<td>string</td>
+<td>Optional field containing combo instrument name if the trade is a combo trade</td>
+</tr>
+<tr>
+<td>  ›  matching_id</td>
+<td>string</td>
+<td>Always <code>null</code></td>
+</tr>
+<tr>
+<td>  ›  order_type</td>
+<td>string</td>
+<td>Order type: <code>"limit</code>, <code>"market"</code>, or <code>"liquidation"</code></td>
+</tr>
+<tr>
+<td>  ›  trade_allocations</td>
+<td>array of <em>object</em></td>
+<td>List of allocations for Block RFQ pre-allocation. Each allocation specifies <code>user_id</code>, <code>amount</code>, and <code>fee</code> for the allocated part of the trade. For broker client allocations, a <code>client_info</code> object will be included.</td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>number</td>
+<td>Amount allocated to this user.</td>
+</tr>
+<tr>
+<td>  ›    ›  client_info</td>
+<td><em>object</em></td>
+<td>Optional client allocation info for brokers.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  client_id</td>
+<td>integer</td>
+<td>ID of a client; available to broker. Represents a group of users under a common name.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  client_link_id</td>
+<td>integer</td>
+<td>ID assigned to a single user in a client; available to broker.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  name</td>
+<td>string</td>
+<td>Name of the linked user within the client; available to broker.</td>
+</tr>
+<tr>
+<td>  ›    ›  fee</td>
+<td>number</td>
+<td>Fee for the allocated part of the trade.</td>
+</tr>
+<tr>
+<td>  ›    ›  user_id</td>
+<td>integer</td>
+<td>User ID to which part of the trade is allocated. For brokers the User ID is obstructed.</td>
+</tr>
+<tr>
+<td>  ›  profit_loss</td>
+<td>number</td>
+<td>Profit and loss in base currency.</td>
+</tr>
+<tr>
+<td>  ›  timestamp</td>
+<td>integer</td>
+<td>The timestamp of the trade (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>  ›  iv</td>
+<td>number</td>
+<td>Option implied volatility for the price (Option only)</td>
+</tr>
+<tr>
+<td>  ›  state</td>
+<td>string</td>
+<td>Order state: <code>"open"</code>, <code>"filled"</code>, <code>"rejected"</code>, <code>"cancelled"</code>, <code>"untriggered"</code> or <code>"archive"</code> (if order was archived)</td>
+</tr>
+<tr>
+<td>  ›  underlying_price</td>
+<td>number</td>
+<td>Underlying price for implied volatility calculations (Options only)</td>
+</tr>
+<tr>
+<td>  ›  block_rfq_quote_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ quote - when trade was part of the Block RFQ</td>
+</tr>
+<tr>
+<td>  ›  quote_set_id</td>
+<td>string</td>
+<td>QuoteSet of the user order (optional, present only for orders placed with <code>private/mass_quote</code>)</td>
+</tr>
+<tr>
+<td>  ›  mark_price</td>
+<td>number</td>
+<td>Mark Price at the moment of trade</td>
+</tr>
+<tr>
+<td>  ›  block_rfq_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ - when trade was part of the Block RFQ</td>
+</tr>
+<tr>
+<td>  ›  combo_trade_id</td>
+<td>number</td>
+<td>Optional field containing combo trade identifier if the trade is a combo trade</td>
+</tr>
+<tr>
+<td>  ›  reduce_only</td>
+<td>string</td>
+<td><code>true</code> if user order is reduce-only</td>
+</tr>
+<tr>
+<td>  ›  amount</td>
+<td>number</td>
+<td>Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>  ›  liquidation</td>
+<td>string</td>
+<td>Optional field (only for trades caused by liquidation): <code>"M"</code> when maker side of trade was under liquidation, <code>"T"</code> when taker side was under liquidation, <code>"MT"</code> when both sides of trade were under liquidation</td>
+</tr>
+<tr>
+<td>  ›  trade_seq</td>
+<td>integer</td>
+<td>The sequence number of the trade within instrument</td>
+</tr>
+<tr>
+<td>  ›  risk_reducing</td>
+<td>boolean</td>
+<td><code>true</code> if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)</td>
+</tr>
+<tr>
+<td>  ›  instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>  ›  legs</td>
+<td>array</td>
+<td>Optional field containing leg trades if trade is a combo trade (present when querying for <strong>only</strong> combo trades and in <code>combo_trades</code> events)</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Error Code</th>
+<th style="text-align: left">Short message</th>
+<th style="text-align: left">Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">0 or absent</td>
+<td style="text-align: left"></td>
+<td style="text-align: left">Success, No error.</td>
+</tr>
+<tr>
+<td style="text-align: left">10000</td>
+<td style="text-align: left"><code>"authorization_required"</code></td>
+<td style="text-align: left">Authorization issue, invalid or absent signature etc.</td>
+</tr>
+<tr>
+<td style="text-align: left">10001</td>
+<td style="text-align: left"><code>"error"</code></td>
+<td style="text-align: left">Some general failure, no public information available.</td>
+</tr>
+<tr>
+<td style="text-align: left">10002</td>
+<td style="text-align: left"><code>"qty_too_low"</code></td>
+<td style="text-align: left">Order quantity is too low.</td>
+</tr>
+<tr>
+<td style="text-align: left">10003</td>
+<td style="text-align: left"><code>"order_overlap"</code></td>
+<td style="text-align: left">Rejection, order overlap is found and self-trading is not enabled.</td>
+</tr>
+<tr>
+<td style="text-align: left">10004</td>
+<td style="text-align: left"><code>"order_not_found"</code></td>
+<td style="text-align: left">Attempt to operate with order that can't be found by specified id or label.</td>
+</tr>
+<tr>
+<td style="text-align: left">10005</td>
+<td style="text-align: left"><code>"price_too_low &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Price is too low, <code>&lt;Limit&gt;</code> defines current limit for the operation.</td>
+</tr>
+<tr>
+<td style="text-align: left">10006</td>
+<td style="text-align: left"><code>"price_too_low4idx &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Price is too low for current index, <code>&lt;Limit&gt;</code> defines current bottom limit for the operation.</td>
+</tr>
+<tr>
+<td style="text-align: left">10007</td>
+<td style="text-align: left"><code>"price_too_high &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Price is too high, <code>&lt;Limit&gt;</code> defines current up limit for the operation.</td>
+</tr>
+<tr>
+<td style="text-align: left">10009</td>
+<td style="text-align: left"><code>"not_enough_funds"</code></td>
+<td style="text-align: left">Account has not enough funds for the operation.</td>
+</tr>
+<tr>
+<td style="text-align: left">10010</td>
+<td style="text-align: left"><code>"already_closed"</code></td>
+<td style="text-align: left">Attempt of doing something with closed order.</td>
+</tr>
+<tr>
+<td style="text-align: left">10011</td>
+<td style="text-align: left"><code>"price_not_allowed"</code></td>
+<td style="text-align: left">This price is not allowed for some reason.</td>
+</tr>
+<tr>
+<td style="text-align: left">10012</td>
+<td style="text-align: left"><code>"book_closed"</code></td>
+<td style="text-align: left">Operation for an instrument which order book had been closed.</td>
+</tr>
+<tr>
+<td style="text-align: left">10013</td>
+<td style="text-align: left"><code>"pme_max_total_open_orders &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Total limit of open orders has been exceeded, it is applicable for PME users.</td>
+</tr>
+<tr>
+<td style="text-align: left">10014</td>
+<td style="text-align: left"><code>"pme_max_future_open_orders &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Limit of count of futures' open orders has been exceeded, it is applicable for PME users.</td>
+</tr>
+<tr>
+<td style="text-align: left">10015</td>
+<td style="text-align: left"><code>"pme_max_option_open_orders &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Limit of count of options' open orders has been exceeded, it is applicable for PME users.</td>
+</tr>
+<tr>
+<td style="text-align: left">10016</td>
+<td style="text-align: left"><code>"pme_max_future_open_orders_size &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Limit of size for futures has been exceeded, it is applicable for PME users.</td>
+</tr>
+<tr>
+<td style="text-align: left">10017</td>
+<td style="text-align: left"><code>"pme_max_option_open_orders_size &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Limit of size for options has been exceeded, it is applicable for PME users.</td>
+</tr>
+<tr>
+<td style="text-align: left">10018</td>
+<td style="text-align: left"><code>"non_pme_max_future_position_size &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Limit of size for futures has been exceeded, it is applicable for non-PME users.</td>
+</tr>
+<tr>
+<td style="text-align: left">10019</td>
+<td style="text-align: left"><code>"locked_by_admin"</code></td>
+<td style="text-align: left">Trading is temporary locked by the admin.</td>
+</tr>
+<tr>
+<td style="text-align: left">10020</td>
+<td style="text-align: left"><code>"invalid_or_unsupported_instrument"</code></td>
+<td style="text-align: left">Instrument name is not valid.</td>
+</tr>
+<tr>
+<td style="text-align: left">10021</td>
+<td style="text-align: left"><code>"invalid_amount"</code></td>
+<td style="text-align: left">Amount is not valid.</td>
+</tr>
+<tr>
+<td style="text-align: left">10022</td>
+<td style="text-align: left"><code>"invalid_quantity"</code></td>
+<td style="text-align: left">quantity was not recognized as a valid number (for API v1).</td>
+</tr>
+<tr>
+<td style="text-align: left">10023</td>
+<td style="text-align: left"><code>"invalid_price"</code></td>
+<td style="text-align: left">price was not recognized as a valid number.</td>
+</tr>
+<tr>
+<td style="text-align: left">10024</td>
+<td style="text-align: left"><code>"invalid_max_show"</code></td>
+<td style="text-align: left"><code>max_show</code> parameter was not recognized as a valid number.</td>
+</tr>
+<tr>
+<td style="text-align: left">10025</td>
+<td style="text-align: left"><code>"invalid_order_id"</code></td>
+<td style="text-align: left">Order id is missing or its format was not recognized as valid.</td>
+</tr>
+<tr>
+<td style="text-align: left">10026</td>
+<td style="text-align: left"><code>"price_precision_exceeded"</code></td>
+<td style="text-align: left">Extra precision of the price is not supported.</td>
+</tr>
+<tr>
+<td style="text-align: left">10027</td>
+<td style="text-align: left"><code>"non_integer_contract_amount"</code></td>
+<td style="text-align: left">Futures contract amount was not recognized as integer.</td>
+</tr>
+<tr>
+<td style="text-align: left">10028</td>
+<td style="text-align: left"><code>"too_many_requests"</code></td>
+<td style="text-align: left">Allowed request rate has been exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">10029</td>
+<td style="text-align: left"><code>"not_owner_of_order"</code></td>
+<td style="text-align: left">Attempt to operate with not own order.</td>
+</tr>
+<tr>
+<td style="text-align: left">10030</td>
+<td style="text-align: left"><code>"must_be_websocket_request"</code></td>
+<td style="text-align: left">REST request where Websocket is expected.</td>
+</tr>
+<tr>
+<td style="text-align: left">10031</td>
+<td style="text-align: left"><code>"invalid_args_for_instrument"</code></td>
+<td style="text-align: left">Some of the arguments are not recognized as valid.</td>
+</tr>
+<tr>
+<td style="text-align: left">10032</td>
+<td style="text-align: left"><code>"whole_cost_too_low"</code></td>
+<td style="text-align: left">Total cost is too low.</td>
+</tr>
+<tr>
+<td style="text-align: left">10033</td>
+<td style="text-align: left"><code>"not_implemented"</code></td>
+<td style="text-align: left">Method is not implemented yet.</td>
+</tr>
+<tr>
+<td style="text-align: left">10034</td>
+<td style="text-align: left"><code>"trigger_price_too_high"</code></td>
+<td style="text-align: left">Trigger price is too high.</td>
+</tr>
+<tr>
+<td style="text-align: left">10035</td>
+<td style="text-align: left"><code>"trigger_price_too_low"</code></td>
+<td style="text-align: left">Trigger price is too low.</td>
+</tr>
+<tr>
+<td style="text-align: left">10036</td>
+<td style="text-align: left"><code>"invalid_max_show_amount"</code></td>
+<td style="text-align: left">Max Show Amount is not valid.</td>
+</tr>
+<tr>
+<td style="text-align: left">10037</td>
+<td style="text-align: left"><code>"non_pme_total_short_options_positions_size &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Limit of total size for short options positions has been exceeded, it is applicable for non-PME users.</td>
+</tr>
+<tr>
+<td style="text-align: left">10038</td>
+<td style="text-align: left"><code>"pme_max_risk_reducing_orders &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Limit of open risk reducing orders has been reached, it is applicable for PME users.</td>
+</tr>
+<tr>
+<td style="text-align: left">10039</td>
+<td style="text-align: left"><code>"not_enough_funds_in_currency &lt;Currency&gt;"</code></td>
+<td style="text-align: left">Returned when the user does not have sufficient spot reserves to complete the spot trade or when an option order would negatively impact the non-cross portfolio margin balance of Cross SM user.</td>
+</tr>
+<tr>
+<td style="text-align: left">10040</td>
+<td style="text-align: left"><code>"retry"</code></td>
+<td style="text-align: left">Request can't be processed right now and should be retried.</td>
+</tr>
+<tr>
+<td style="text-align: left">10041</td>
+<td style="text-align: left"><code>"settlement_in_progress"</code></td>
+<td style="text-align: left">Settlement is in progress. Every day at settlement time for several seconds, the system calculates user profits and updates balances. That time trading is paused for several seconds till the calculation is completed.</td>
+</tr>
+<tr>
+<td style="text-align: left">10043</td>
+<td style="text-align: left"><code>"price_wrong_tick"</code></td>
+<td style="text-align: left">Price has to be rounded to an instrument tick size.</td>
+</tr>
+<tr>
+<td style="text-align: left">10044</td>
+<td style="text-align: left"><code>"trigger_price_wrong_tick"</code></td>
+<td style="text-align: left">Trigger Price has to be rounded to an instrument tick size.</td>
+</tr>
+<tr>
+<td style="text-align: left">10045</td>
+<td style="text-align: left"><code>"can_not_cancel_liquidation_order"</code></td>
+<td style="text-align: left">Liquidation order can't be cancelled.</td>
+</tr>
+<tr>
+<td style="text-align: left">10046</td>
+<td style="text-align: left"><code>"can_not_edit_liquidation_order"</code></td>
+<td style="text-align: left">Liquidation order can't be edited.</td>
+</tr>
+<tr>
+<td style="text-align: left">10047</td>
+<td style="text-align: left"><code>"matching_engine_queue_full"</code></td>
+<td style="text-align: left">Reached limit of pending Matching Engine requests for user.</td>
+</tr>
+<tr>
+<td style="text-align: left">10048</td>
+<td style="text-align: left"><code>"not_on_this_server"</code></td>
+<td style="text-align: left">The requested operation is not available on this server.</td>
+</tr>
+<tr>
+<td style="text-align: left">10049</td>
+<td style="text-align: left"><code>"cancel_on_disconnect_failed"</code></td>
+<td style="text-align: left">Enabling Cancel On Disconnect for the connection failed.</td>
+</tr>
+<tr>
+<td style="text-align: left">10066</td>
+<td style="text-align: left"><code>"too_many_concurrent_requests"</code></td>
+<td style="text-align: left">The client has sent too many public requests that have not yet been executed.</td>
+</tr>
+<tr>
+<td style="text-align: left">10072</td>
+<td style="text-align: left"><code>"disabled_while_position_lock"</code></td>
+<td style="text-align: left">Spot trading is disabled for users in reduce only mode.</td>
+</tr>
+<tr>
+<td style="text-align: left">11008</td>
+<td style="text-align: left"><code>"already_filled"</code></td>
+<td style="text-align: left">This request is not allowed in regards to the filled order.</td>
+</tr>
+<tr>
+<td style="text-align: left">11013</td>
+<td style="text-align: left"><code>"max_spot_open_orders"</code></td>
+<td style="text-align: left">Total limit of open orders on spot instruments has been exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">11021</td>
+<td style="text-align: left"><code>"post_only_price_modification_not_possible"</code></td>
+<td style="text-align: left">Price modification for post only order is not possible.</td>
+</tr>
+<tr>
+<td style="text-align: left">11022</td>
+<td style="text-align: left"><code>"max_spot_order_quantity"</code></td>
+<td style="text-align: left">Limit of quantity per currency for spot instruments has been exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">11029</td>
+<td style="text-align: left"><code>"invalid_arguments"</code></td>
+<td style="text-align: left">Some invalid input has been detected.</td>
+</tr>
+<tr>
+<td style="text-align: left">11030</td>
+<td style="text-align: left"><code>"other_reject &lt;Reason&gt;"</code></td>
+<td style="text-align: left">Some rejects which are not considered as very often, more info may be specified in <code>&lt;Reason&gt;</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">11031</td>
+<td style="text-align: left"><code>"other_error &lt;Error&gt;"</code></td>
+<td style="text-align: left">Some errors which are not considered as very often, more info may be specified in <code>&lt;Error&gt;</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left">11035</td>
+<td style="text-align: left"><code>"no_more_triggers &lt;Limit&gt;"</code></td>
+<td style="text-align: left">Allowed amount of trigger orders has been exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">11036</td>
+<td style="text-align: left"><code>"invalid_trigger_price"</code></td>
+<td style="text-align: left">Invalid trigger price (too high or too low) in relation to the last trade, index or market price.</td>
+</tr>
+<tr>
+<td style="text-align: left">11037</td>
+<td style="text-align: left"><code>"outdated_instrument_for_IV_order"</code></td>
+<td style="text-align: left">Instrument already not available for trading.</td>
+</tr>
+<tr>
+<td style="text-align: left">11038</td>
+<td style="text-align: left"><code>"no_adv_for_futures"</code></td>
+<td style="text-align: left">Advanced orders are not available for futures.</td>
+</tr>
+<tr>
+<td style="text-align: left">11039</td>
+<td style="text-align: left"><code>"no_adv_postonly"</code></td>
+<td style="text-align: left">Advanced post-only orders are not supported yet.</td>
+</tr>
+<tr>
+<td style="text-align: left">11041</td>
+<td style="text-align: left"><code>"not_adv_order"</code></td>
+<td style="text-align: left">Advanced order properties can't be set if the order is not advanced.</td>
+</tr>
+<tr>
+<td style="text-align: left">11042</td>
+<td style="text-align: left"><code>"permission_denied"</code></td>
+<td style="text-align: left">Permission for the operation has been denied.</td>
+</tr>
+<tr>
+<td style="text-align: left">11043</td>
+<td style="text-align: left"><code>"bad_argument"</code></td>
+<td style="text-align: left">Bad argument has been passed.</td>
+</tr>
+<tr>
+<td style="text-align: left">11044</td>
+<td style="text-align: left"><code>"not_open_order"</code></td>
+<td style="text-align: left">Attempt to do open order operations with the not open order.</td>
+</tr>
+<tr>
+<td style="text-align: left">11045</td>
+<td style="text-align: left"><code>"invalid_event"</code></td>
+<td style="text-align: left">Event name has not been recognized.</td>
+</tr>
+<tr>
+<td style="text-align: left">11046</td>
+<td style="text-align: left"><code>"outdated_instrument"</code></td>
+<td style="text-align: left">At several minutes to instrument expiration, corresponding advanced implied volatility orders are not allowed.</td>
+</tr>
+<tr>
+<td style="text-align: left">11047</td>
+<td style="text-align: left"><code>"unsupported_arg_combination"</code></td>
+<td style="text-align: left">The specified combination of arguments is not supported.</td>
+</tr>
+<tr>
+<td style="text-align: left">11048</td>
+<td style="text-align: left"><code>"wrong_max_show_for_option"</code></td>
+<td style="text-align: left">Wrong Max Show for options.</td>
+</tr>
+<tr>
+<td style="text-align: left">11049</td>
+<td style="text-align: left"><code>"bad_arguments"</code></td>
+<td style="text-align: left">Several bad arguments have been passed.</td>
+</tr>
+<tr>
+<td style="text-align: left">11050</td>
+<td style="text-align: left"><code>"bad_request"</code></td>
+<td style="text-align: left">Request has not been parsed properly.</td>
+</tr>
+<tr>
+<td style="text-align: left">11051</td>
+<td style="text-align: left"><code>"system_maintenance"</code></td>
+<td style="text-align: left">System is under maintenance.</td>
+</tr>
+<tr>
+<td style="text-align: left">11052</td>
+<td style="text-align: left"><code>"subscribe_error_unsubscribed"</code></td>
+<td style="text-align: left">Subscription error. However, subscription may fail without this error, please check the list of subscribed channels returned, as some channels can be not subscribed due to wrong input or lack of permissions.</td>
+</tr>
+<tr>
+<td style="text-align: left">11053</td>
+<td style="text-align: left"><code>"transfer_not_found"</code></td>
+<td style="text-align: left">Specified transfer is not found.</td>
+</tr>
+<tr>
+<td style="text-align: left">11054</td>
+<td style="text-align: left"><code>"post_only_reject"</code></td>
+<td style="text-align: left">Request rejected due to <code>reject_post_only</code> flag.</td>
+</tr>
+<tr>
+<td style="text-align: left">11055</td>
+<td style="text-align: left"><code>"post_only_not_allowed"</code></td>
+<td style="text-align: left">Post only flag not allowed for given order type.</td>
+</tr>
+<tr>
+<td style="text-align: left">11056</td>
+<td style="text-align: left"><code>"unauthenticated_public_requests_temporarily_disabled"</code></td>
+<td style="text-align: left">Request rejected because of unauthenticated public requests were temporarily disabled.</td>
+</tr>
+<tr>
+<td style="text-align: left">11090</td>
+<td style="text-align: left"><code>"invalid_addr"</code></td>
+<td style="text-align: left">Invalid address.</td>
+</tr>
+<tr>
+<td style="text-align: left">11091</td>
+<td style="text-align: left"><code>"invalid_transfer_address"</code></td>
+<td style="text-align: left">Invalid address for the transfer.</td>
+</tr>
+<tr>
+<td style="text-align: left">11092</td>
+<td style="text-align: left"><code>"address_already_exist"</code></td>
+<td style="text-align: left">The address already exists.</td>
+</tr>
+<tr>
+<td style="text-align: left">11093</td>
+<td style="text-align: left"><code>"max_addr_count_exceeded"</code></td>
+<td style="text-align: left">Limit of allowed addresses has been reached.</td>
+</tr>
+<tr>
+<td style="text-align: left">11094</td>
+<td style="text-align: left"><code>"internal_server_error"</code></td>
+<td style="text-align: left">Some unhandled error on server. Please report to admin. The details of the request will help to locate the problem.</td>
+</tr>
+<tr>
+<td style="text-align: left">11095</td>
+<td style="text-align: left"><code>"disabled_deposit_address_creation"</code></td>
+<td style="text-align: left">Deposit address creation has been disabled by admin.</td>
+</tr>
+<tr>
+<td style="text-align: left">11096</td>
+<td style="text-align: left"><code>"address_belongs_to_user"</code></td>
+<td style="text-align: left">Withdrawal instead of transfer.</td>
+</tr>
+<tr>
+<td style="text-align: left">11097</td>
+<td style="text-align: left"><code>"no_deposit_address"</code></td>
+<td style="text-align: left">Deposit address not specified.</td>
+</tr>
+<tr>
+<td style="text-align: left">11098</td>
+<td style="text-align: left"><code>"account_locked"</code></td>
+<td style="text-align: left">Account locked.</td>
+</tr>
+<tr>
+<td style="text-align: left">12001</td>
+<td style="text-align: left"><code>"too_many_subaccounts"</code></td>
+<td style="text-align: left">Limit of subbacounts is reached.</td>
+</tr>
+<tr>
+<td style="text-align: left">12002</td>
+<td style="text-align: left"><code>"wrong_subaccount_name"</code></td>
+<td style="text-align: left">The input is not allowed as the name of subaccount.</td>
+</tr>
+<tr>
+<td style="text-align: left">12003</td>
+<td style="text-align: left"><code>"login_over_limit"</code></td>
+<td style="text-align: left">The number of failed login attempts is limited.</td>
+</tr>
+<tr>
+<td style="text-align: left">12004</td>
+<td style="text-align: left"><code>"registration_over_limit"</code></td>
+<td style="text-align: left">The number of registration requests is limited.</td>
+</tr>
+<tr>
+<td style="text-align: left">12005</td>
+<td style="text-align: left"><code>"country_is_banned"</code></td>
+<td style="text-align: left">The country is banned (possibly via IP check).</td>
+</tr>
+<tr>
+<td style="text-align: left">12100</td>
+<td style="text-align: left"><code>"transfer_not_allowed"</code></td>
+<td style="text-align: left">Transfer is not allowed. Possible wrong direction or other mistake.</td>
+</tr>
+<tr>
+<td style="text-align: left">12998</td>
+<td style="text-align: left"><code>"security_key_authorization_over_limit"</code></td>
+<td style="text-align: left">Too many failed security key authorizations. The client should wait for <code>wait</code> seconds to try again.</td>
+</tr>
+<tr>
+<td style="text-align: left">13004</td>
+<td style="text-align: left"><code>"invalid_credentials"</code></td>
+<td style="text-align: left">Invalid credentials have been used.</td>
+</tr>
+<tr>
+<td style="text-align: left">13005</td>
+<td style="text-align: left"><code>"pwd_match_error"</code></td>
+<td style="text-align: left">Password confirmation error.</td>
+</tr>
+<tr>
+<td style="text-align: left">13006</td>
+<td style="text-align: left"><code>"security_error"</code></td>
+<td style="text-align: left">Invalid Security Code.</td>
+</tr>
+<tr>
+<td style="text-align: left">13007</td>
+<td style="text-align: left"><code>"user_not_found"</code></td>
+<td style="text-align: left">User's security code has been changed or wrong.</td>
+</tr>
+<tr>
+<td style="text-align: left">13008</td>
+<td style="text-align: left"><code>"request_failed"</code></td>
+<td style="text-align: left">Request failed because of invalid input or internal failure.</td>
+</tr>
+<tr>
+<td style="text-align: left">13009</td>
+<td style="text-align: left"><code>"unauthorized"</code></td>
+<td style="text-align: left">Wrong or expired authorization token or bad signature. For example, please check the scope of the token, "connection" scope can't be reused for other connections.</td>
+</tr>
+<tr>
+<td style="text-align: left">13010</td>
+<td style="text-align: left"><code>"value_required"</code></td>
+<td style="text-align: left">Invalid input, missing value.</td>
+</tr>
+<tr>
+<td style="text-align: left">13011</td>
+<td style="text-align: left"><code>"value_too_short"</code></td>
+<td style="text-align: left">Input is too short.</td>
+</tr>
+<tr>
+<td style="text-align: left">13012</td>
+<td style="text-align: left"><code>"unavailable_in_subaccount"</code></td>
+<td style="text-align: left">Subaccount restrictions.</td>
+</tr>
+<tr>
+<td style="text-align: left">13013</td>
+<td style="text-align: left"><code>"invalid_phone_number"</code></td>
+<td style="text-align: left">Unsupported or invalid phone number.</td>
+</tr>
+<tr>
+<td style="text-align: left">13014</td>
+<td style="text-align: left"><code>"cannot_send_sms"</code></td>
+<td style="text-align: left">SMS sending failed -- phone number is wrong.</td>
+</tr>
+<tr>
+<td style="text-align: left">13015</td>
+<td style="text-align: left"><code>"invalid_sms_code"</code></td>
+<td style="text-align: left">Invalid SMS code.</td>
+</tr>
+<tr>
+<td style="text-align: left">13016</td>
+<td style="text-align: left"><code>"invalid_input"</code></td>
+<td style="text-align: left">Invalid input.</td>
+</tr>
+<tr>
+<td style="text-align: left">13018</td>
+<td style="text-align: left"><code>"invalid_content_type"</code></td>
+<td style="text-align: left">Invalid content type of the request.</td>
+</tr>
+<tr>
+<td style="text-align: left">13019</td>
+<td style="text-align: left"><code>"orderbook_closed"</code></td>
+<td style="text-align: left">Closed, expired order book.</td>
+</tr>
+<tr>
+<td style="text-align: left">13020</td>
+<td style="text-align: left"><code>"not_found"</code></td>
+<td style="text-align: left">Instrument is not found, invalid instrument name.</td>
+</tr>
+<tr>
+<td style="text-align: left">13021</td>
+<td style="text-align: left"><code>"forbidden"</code></td>
+<td style="text-align: left">Not enough permissions to execute the request, forbidden.</td>
+</tr>
+<tr>
+<td style="text-align: left">13025</td>
+<td style="text-align: left"><code>"method_switched_off_by_admin"</code></td>
+<td style="text-align: left">API method temporarily switched off by the administrator.</td>
+</tr>
+<tr>
+<td style="text-align: left">13028</td>
+<td style="text-align: left"><code>"temporarily_unavailable"</code></td>
+<td style="text-align: left">The requested service is not responding or processing the response takes too long.</td>
+</tr>
+<tr>
+<td style="text-align: left">13030</td>
+<td style="text-align: left"><code>"mmp_trigger"</code></td>
+<td style="text-align: left">Order has been rejected due to the MMP trigger.</td>
+</tr>
+<tr>
+<td style="text-align: left">13031</td>
+<td style="text-align: left"><code>"verification_required"</code></td>
+<td style="text-align: left">API method allowed only for verified users.</td>
+</tr>
+<tr>
+<td style="text-align: left">13032</td>
+<td style="text-align: left"><code>"non_unique_order_label"</code></td>
+<td style="text-align: left">Request allowed only for orders uniquely identified by given label, more than one match was foun.</td>
+</tr>
+<tr>
+<td style="text-align: left">13034</td>
+<td style="text-align: left"><code>"no_more_security_keys_allowed"</code></td>
+<td style="text-align: left">Maximal number of tokens allowed reached.</td>
+</tr>
+<tr>
+<td style="text-align: left">13035</td>
+<td style="text-align: left"><code>"active_combo_limit_reached"</code></td>
+<td style="text-align: left">Limit of active combo books was reached. The client should wait some time before retrying the request.</td>
+</tr>
+<tr>
+<td style="text-align: left">13036</td>
+<td style="text-align: left"><code>"unavailable_for_combo_books"</code></td>
+<td style="text-align: left">Action is temporarily unavailable for combo books.</td>
+</tr>
+<tr>
+<td style="text-align: left">13037</td>
+<td style="text-align: left"><code>"incomplete_KYC_data"</code></td>
+<td style="text-align: left">KYC verification data is insufficient for external service provider.</td>
+</tr>
+<tr>
+<td style="text-align: left">13040</td>
+<td style="text-align: left"><code>"mmp_required"</code></td>
+<td style="text-align: left">User is not a MMP user.</td>
+</tr>
+<tr>
+<td style="text-align: left">13042</td>
+<td style="text-align: left"><code>"cod_not_enabled"</code></td>
+<td style="text-align: left">Cancel-on-Disconnect is not enabled for the connection.</td>
+</tr>
+<tr>
+<td style="text-align: left">13043</td>
+<td style="text-align: left"><code>"quotes_frozen"</code></td>
+<td style="text-align: left">Quotes are still frozen after previous cancel.</td>
+</tr>
+<tr>
+<td style="text-align: left">13403</td>
+<td style="text-align: left"><code>"scope_exceeded"</code></td>
+<td style="text-align: left">Error returned after the user tried to edit / delete an API key using an authorized key connection with insufficient scope.</td>
+</tr>
+<tr>
+<td style="text-align: left">13503</td>
+<td style="text-align: left"><code>"unavailable"</code></td>
+<td style="text-align: left">Method is currently not available.</td>
+</tr>
+<tr>
+<td style="text-align: left">13666</td>
+<td style="text-align: left"><code>"request_cancelled_by_user"</code></td>
+<td style="text-align: left">Request was cancelled by the user with other api request.</td>
+</tr>
+<tr>
+<td style="text-align: left">13777</td>
+<td style="text-align: left"><code>"replaced"</code></td>
+<td style="text-align: left">Edit request was replaced by other one.</td>
+</tr>
+<tr>
+<td style="text-align: left">13778</td>
+<td style="text-align: left"><code>"raw_subscriptions_not_available_for_unauthorized"</code></td>
+<td style="text-align: left">Raw subscriptions are not available for unauthorized requests.</td>
+</tr>
+<tr>
+<td style="text-align: left">13780</td>
+<td style="text-align: left"><code>"move_positions_over_limit"</code></td>
+<td style="text-align: left">The client cannot execute the request yet, and should wait for <code>wait</code> seconds to try again.</td>
+</tr>
+<tr>
+<td style="text-align: left">13781</td>
+<td style="text-align: left"><code>"coupon_already_used"</code></td>
+<td style="text-align: left">The coupon has already been used by current account.</td>
+</tr>
+<tr>
+<td style="text-align: left">13791</td>
+<td style="text-align: left"><code>"KYC_transfer_already_initiated"</code></td>
+<td style="text-align: left">Sharing of KYC data with a third party provider was already initiated.</td>
+</tr>
+<tr>
+<td style="text-align: left">13792</td>
+<td style="text-align: left"><code>"incomplete_KYC_data"</code></td>
+<td style="text-align: left">User's KYC data stored on the platform is insufficient for sharing according to third party provider.</td>
+</tr>
+<tr>
+<td style="text-align: left">13793</td>
+<td style="text-align: left"><code>"KYC_data_inaccessible"</code></td>
+<td style="text-align: left">User's KYC data is inaccessible at the moment. Client should try again later.</td>
+</tr>
+<tr>
+<td style="text-align: left">13888</td>
+<td style="text-align: left"><code>"timed_out"</code></td>
+<td style="text-align: left">Server did not manage to process request when it was valid (<code>valid_until</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left">13901</td>
+<td style="text-align: left"><code>"no_more_oto_orders"</code></td>
+<td style="text-align: left">Total limit of open "one triggers other" orders has been exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">13902</td>
+<td style="text-align: left"><code>"mass_quotes_disabled"</code></td>
+<td style="text-align: left">Mass Quotes feature disabled for this user and currency.</td>
+</tr>
+<tr>
+<td style="text-align: left">13903</td>
+<td style="text-align: left"><code>"too_many_quotes"</code></td>
+<td style="text-align: left">Number of quotes (in Mass Quotes requests) per second exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">13904</td>
+<td style="text-align: left"><code>"security_key_setup_required"</code></td>
+<td style="text-align: left">Not allowed without a full security key setup.</td>
+</tr>
+<tr>
+<td style="text-align: left">13905</td>
+<td style="text-align: left"><code>"too_many_quotes_per_block_rfq"</code></td>
+<td style="text-align: left">Number of quotes for single block rfq exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">13906</td>
+<td style="text-align: left"><code>"too_many_quotes_per_block_rfq_side"</code></td>
+<td style="text-align: left">Number of quotes per single block rfq side exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">13907</td>
+<td style="text-align: left"><code>"not_fully_filled"</code></td>
+<td style="text-align: left">Block Rfq trade cannot be fully filled with matched quotes.</td>
+</tr>
+<tr>
+<td style="text-align: left">13907</td>
+<td style="text-align: left"><code>"too_many_open_block_rfqs"</code></td>
+<td style="text-align: left">Number of open block rfq by taker exceeds configured max amount.</td>
+</tr>
+<tr>
+<td style="text-align: left">13910</td>
+<td style="text-align: left"><code>"quote_crossed"</code></td>
+<td style="text-align: left">Quote placed by the maker crosses an already placed quote by the same maker.</td>
+</tr>
+<tr>
+<td style="text-align: left">13911</td>
+<td style="text-align: left"><code>"max_broker_client_count"</code></td>
+<td style="text-align: left">Number of broker client's exceeds allowed max amount.</td>
+</tr>
+<tr>
+<td style="text-align: left">13912</td>
+<td style="text-align: left"><code>"broker_cannot_be_client"</code></td>
+<td style="text-align: left">Broker accounts cannot be clients of other brokers.</td>
+</tr>
+<tr>
+<td style="text-align: left">13913</td>
+<td style="text-align: left"><code>"broker_already_linked"</code></td>
+<td style="text-align: left">User has already been linked to this broker.</td>
+</tr>
+<tr>
+<td style="text-align: left">13914</td>
+<td style="text-align: left"><code>"user_is_a_broker_client"</code></td>
+<td style="text-align: left">User is a client of a broker account.</td>
+</tr>
+<tr>
+<td style="text-align: left">13915</td>
+<td style="text-align: left"><code>"user_is_not_a_broker"</code></td>
+<td style="text-align: left">User account is not configured as broker account.</td>
+</tr>
+<tr>
+<td style="text-align: left">13916</td>
+<td style="text-align: left"><code>"app_registered_to_broker"</code></td>
+<td style="text-align: left">Application is registered to a broker.</td>
+</tr>
+<tr>
+<td style="text-align: left">13917</td>
+<td style="text-align: left"><code>"account_quote_limit_crossed"</code></td>
+<td style="text-align: left">Block Rfq quote limits set for the account were crossed.</td>
+</tr>
+<tr>
+<td style="text-align: left">13918</td>
+<td style="text-align: left"><code>"inverse_future_cross_trading"</code></td>
+<td style="text-align: left">Placed block rfq quote would cross trade inverse futures with block rfq quote limits set on the account.</td>
+</tr>
+<tr>
+<td style="text-align: left">13919</td>
+<td style="text-align: left"><code>"client_of_main_account"</code></td>
+<td style="text-align: left">Subaccounts of brokers cannot be linked to their own broker account.</td>
+</tr>
+<tr>
+<td style="text-align: left">-32602</td>
+<td style="text-align: left"><code>"Invalid params"</code></td>
+<td style="text-align: left">See JSON-RPC spec.</td>
+</tr>
+<tr>
+<td style="text-align: left">-32600</td>
+<td style="text-align: left"><code>"request entity too large"</code></td>
+<td style="text-align: left">Error thrown when body size in POST request or single frame in websocket connection frame exceeds the limit (32 kB).</td>
+</tr>
+<tr>
+<td style="text-align: left">-32601</td>
+<td style="text-align: left"><code>"Method not found"</code></td>
+<td style="text-align: left">See JSON-RPC spec.</td>
+</tr>
+<tr>
+<td style="text-align: left">-32700</td>
+<td style="text-align: left"><code>"Parse error"</code></td>
+<td style="text-align: left">See JSON-RPC spec.</td>
+</tr>
+<tr>
+<td style="text-align: left">-32000</td>
+<td style="text-align: left"><code>"Missing params"</code></td>
+<td style="text-align: left">See JSON-RPC spec.</td>
+</tr>
+</tbody></table>

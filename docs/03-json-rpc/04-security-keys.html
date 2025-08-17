@@ -1,0 +1,75 @@
+<h2 id="security-keys">Security keys</h2>
+<blockquote>
+<p>Request that may require security key authorization</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"private/list_api_keys"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"params"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Some methods may require additional authorization using Security Keys (depending on the user's account configuration). 
+In this case, instead of a normal response, there is a returned response with field <code>security_key_authorization_required</code> set to <code>true</code>. 
+When that happens the client is required to resend a request with additional parameters: <code>authorization_data</code> and <code>challenge</code>.</p>
+<p>For example, after client sends request that needs Security Key confirmation, like <code>private/list_api_keys</code> server return (non error) response with field: <code>security_key_authorization_required</code> set to <code>true</code>. Other fields are attached too:
+</p><ul>
+<li><code>security_keys</code> -  a list of security keys that can be used for authentication. Fields in Security Key object are:
+<ul>
+<li><code>type</code> - type of security key: <code>tfa</code> for TOTP Two Factor Authentication</li>
+<li><code>name</code> - name of security key</li>
+</ul></li>
+<li><code>rp_id</code> - relying party identifier (need to be used with WebAuthn)</li>
+<li><code>challenge</code> - this string needs to be resend, it is valid for 1 minute</li>
+</ul>
+<blockquote>
+<p>Example of response with request to make Security Key authorization:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"security_keys"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+         </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tfa"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tfa"</span><span class="w">
+         </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nl">"security_key_authorization_required"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"rp_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test.deribit.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"challenge"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+Di4SKN9VykrSoHlZO2KF3LEyEZF4ih9CZXVuudQiKQ="</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id="tfa-authorization">TFA authorization</h3>
+<p>When the user chooses TFA authorization, he should read the TFA code from his application, and it should be added to original requests parameters as <code>authorization_data</code>. It is required to add to parameters <code>challenge</code> too. Then request should be repeated with those updated parameters.</p>
+<blockquote>
+<p>Example of request when TFA code is <code>602051</code>:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="mi">88</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"private/list_api_keys"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"params"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"authorization_data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"602051"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"challenge"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+Di4SKN9VykrSoHlZO2KF3LEyEZF4ih9CZXVuudQiKQ="</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id="errors">Errors:</h3>
+<p>When there is an error related to the Security Key authorization, a response with the error <code>security_key_authorization_error</code> (code: 13668) is returned.  It will have a <code>data.reason</code> field that possible values are:
+</p><ul>
+<li><code>tfa_code_not_matched</code> - provided TFA code was invalid</li>
+<li><code>used_tfa_code</code> - provided TFA code was already used</li>
+<li><code>challenge_timeout</code> - challenge is invalid</li>
+<li><code>tfa_code_is_required</code> - provided TFA code was empty</li>
+</ul>
+<p>When an error occurrs, the request needs to be repeated without authorization_data to obtain a new challenge.</p>
+<blockquote>
+<p>Example of erroneous response:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"error"</span><span class="p">:{</span><span class="w">
+        </span><span class="nl">"message"</span><span class="p">:</span><span class="s2">"security_key_authorization_error"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"data"</span><span class="p">:{</span><span class="w">
+            </span><span class="nl">"reason"</span><span class="p">:</span><span class="s2">"tfa_code_not_matched"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"code"</span><span class="p">:</span><span class="mi">13668</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>

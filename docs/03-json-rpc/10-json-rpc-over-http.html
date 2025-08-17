@@ -1,0 +1,24 @@
+<h2 id="json-rpc-over-http">JSON-RPC over HTTP</h2>
+<p>Besides websockets it is also possible to use the API via HTTP. The code
+examples for 'shell' show how this can be done using curl. Note that
+subscriptions and cancel on disconnect are not supported via HTTP.</p>
+ ## Deribit Event Nodes
+Deribit has implemented a new feature called "Deribit Event Nodes" to offload traffic from the retail nodes and decrease latency. This feature is dedicated to handling public subscriptions and specific endpoints, allowing unauthorized users to subscribe to "raw" market data, as well as to aggregated ones.
+
+|Supported endpoints|
+|-|
+|public/test|
+|public/ping|
+|public/get_time|
+|public/set_heartbeat|
+|public/disable_heartbeat|
+|public/hello|
+|public/unsubscribe_all|
+|public/subscribe|
+|public/unsubscribe|
+
+
+
+In order to use Deribit Event Nodes, simply change websocket endpoint from `wss://test.deribit.com/ws/api/v2` to `wss://test.deribit.com/den/ws` for test environment, or change `wss://www.deribit.com/ws/api/v2` to `wss://streams.deribit.com/ws/api/v2` for production environment.
+We strongly suggest using Deribit Event Nodes for all public subscriptions. 
+<h1 id="authentication-2">Authentication</h1>

@@ -1,0 +1,323 @@
+<h2 id="private-pme-simulate">/private/pme/simulate</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/pme/simulate?currency=BTC"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+<span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">2255</span><span class="p">,</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">private/pme/simulate</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:{</span><span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">}};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// ------------------- </span>
+    <span class="c1">// Before sending message, make sure that your connection</span>
+    <span class="c1">// is authenticated (use public/auth call before) </span>
+    <span class="c1">// ------------------- </span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+<span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="mi">2255</span><span class="p">,</span><span class="s">"jsonrpc"</span><span class="p">:</span><span class="s">"2.0"</span><span class="p">,</span><span class="s">"method"</span><span class="p">:</span><span class="s">"private/pme/simulate"</span><span class="p">,</span><span class="s">"params"</span><span class="p">:{</span><span class="s">"currency"</span><span class="p">:</span><span class="s">"BTC"</span><span class="p">}}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="c1">###############
+</span>       <span class="c1"># Before sending message, make sure that your connection
+</span>       <span class="c1"># is authenticated (use public/auth call before) 
+</span>       <span class="c1">###############
+</span>       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2255</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"model_params"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"currency_pair"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"btc_usd"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"extended_table_factor"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"m_inc"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00005</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"min_volatility_for_shock_up"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"max_delta_shock"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"delta_total_liq_shock_threshold"</span><span class="p">:</span><span class="w"> </span><span class="mi">20000000</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"volatility_range_down"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.25</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"volatility_range_up"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"long_term_vega_power"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.13</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"short_term_vega_power"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"price_range"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.16</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"usd"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"max_offsetable_pnl"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"annualised_move_risk"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"extended_dampener"</span><span class="p">:</span><span class="w"> </span><span class="mi">25000</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"min_annualised_move"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"haircut"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"equity_side_impact"</span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"pnl_offset"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"correlation_set"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"btc"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"max_offsetable_pnl"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"annualised_move_risk"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.075</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"extended_dampener"</span><span class="p">:</span><span class="w"> </span><span class="mi">100000</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"min_annualised_move"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"haircut"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"equity_side_impact"</span><span class="p">:</span><span class="w"> </span><span class="s2">"both"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"pnl_offset"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"correlation_set"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"general"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"mm_factor"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"buckets_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"vol_scenarios_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1718619740501</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"aggregated_risk_vectors"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"btc_btc"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"standard"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="mf">-0.05968587238095239</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.05968587238095239</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.05968587238095239</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.04272965863636364</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.04272965863636364</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.04272965863636364</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.02724789826086957</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.02724789826086957</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.02724789826086957</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.013056284583333334</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.013056284583333334</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.013056284583333334</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="nl">"extended"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"initial_risk_vectors"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"BTC-PERPETUAL"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"standard"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="mf">-0.05991206933333334</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.05991206933333334</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.05991206933333334</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.04289159509090909</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.04289159509090909</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.04289159509090909</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.027351162086956524</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.027351162086956524</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.027351162086956524</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.013105765166666668</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.013105765166666668</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.013105765166666668</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.012097629384615385</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.012097629384615385</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.012097629384615385</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.023299138074074074</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.023299138074074074</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.023299138074074074</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.033700538999999995</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.033700538999999995</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.033700538999999995</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.043384601931034494</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.043384601931034494</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.043384601931034494</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="nl">"extended"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="mf">-0.05991206933333334</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.05991206933333334</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.04338460193103449</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.04338460193103449</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.04338460193103449</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.04338460193103449</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.04338460193103449</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.04338460193103449</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"BTC-28JUN24"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"standard"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="mf">0.0002261969523809524</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.0002261969523809524</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.0002261969523809524</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.00016193645454545456</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.00016193645454545456</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.00016193645454545456</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.00010326382608695652</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.00010326382608695652</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.00010326382608695652</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.00004948058333333334</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.00004948058333333334</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.00004948058333333334</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.00004567438461538462</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.00004567438461538462</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.00004567438461538462</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.00008796548148148148</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.00008796548148148148</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.00008796548148148148</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.0001272357857142857</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.0001272357857142857</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.0001272357857142857</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.00016379779310344832</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.00016379779310344832</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.00016379779310344832</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="nl">"extended"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="mf">0.0002261969523809524</span><span class="p">,</span><span class="w">
+          </span><span class="mf">0.0002261969523809524</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.0001637977931034483</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.0001637977931034483</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.0001637977931034483</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.0001637977931034483</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.0001637977931034483</span><span class="p">,</span><span class="w">
+          </span><span class="mf">-0.0001637977931034483</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"margins"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"btc"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"initial_margin_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"risk_matrix_margin_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"delta_shock"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"roll_shock"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00315725898</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"worst_case_bucket"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"bucket"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"left"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"standard"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"worst_case"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05968587238095239</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"correlation_contingency"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nl">"risk_matrix_margin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.06284313098</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"spot_margin"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"mmp_margin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.06</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"open_orders_margin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.000018212</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"initial_margin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.122861343</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"maintenance_margin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.050274504784</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"portfolio"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+      </span><span class="nl">"position"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"BTC-PERPETUAL"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.314538364</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"BTC-28JUN24"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.001187534</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"index_price"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"btc_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">65666.19</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"ticker"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"BTC-PERPETUAL"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">65910.57</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">65666.19</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"BTC-28JUN24"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">67371.75</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">65666.19</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Calculates the Extended Risk Matrix and margin information for the selected currency or against the entire Cross-Collateral portfolio.</p>
+<p><strong>Scope: </strong> <code>account:read</code></p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fpme%2Fsimulate" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div></aside>
+<h3 id="parameters-165">Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency</td>
+<td>true</td>
+<td>string</td>
+<td><code>BTC</code><br/><code>ETH</code><br/><code>USDC</code><br/><code>USDT</code><br/><code>CROSS</code></td>
+<td>The currency for which the Extended Risk Matrix will be calculated. Use <code>CROSS</code> for Cross Collateral simulation.</td>
+</tr>
+<tr>
+<td>add_positions</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+<td>If <code>true</code>, adds simulated positions to current positions, otherwise uses only simulated positions. By default <code>true</code></td>
+</tr>
+<tr>
+<td>simulated_positions</td>
+<td>false</td>
+<td>object</td>
+<td></td>
+<td>Object with positions in following form: <code>{InstrumentName1: Position1, InstrumentName2: Position2...}</code>, for example <code>{"BTC-PERPETUAL": -1.0}</code> (or corresponding URI-encoding for GET). Size in base currency.</td>
+</tr>
+</tbody></table>
+<h3 id="response-165">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The id that was sent in the request</td>
+</tr>
+<tr>
+<td>jsonrpc</td>
+<td>string</td>
+<td>The JSON-RPC version (2.0)</td>
+</tr>
+<tr>
+<td>result</td>
+<td>object</td>
+<td>Simulation details</td>
+</tr>
+</tbody></table>

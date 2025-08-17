@@ -1,0 +1,835 @@
+<h2 id="private-sell">/private/sell</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/sell?amount=123&amp;instrument_name=ETH-PERPETUAL&amp;price=1.45610000000000013642e%2B02&amp;trigger=last_price&amp;trigger_price=145&amp;type=stop_limit"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+<span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">2148</span><span class="p">,</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">private/sell</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:{</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="mi">123</span><span class="p">,</span><span class="dl">"</span><span class="s2">instrument_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">ETH-PERPETUAL</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">price</span><span class="dl">"</span><span class="p">:</span><span class="mf">145.61</span><span class="p">,</span><span class="dl">"</span><span class="s2">trigger</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">last_price</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">trigger_price</span><span class="dl">"</span><span class="p">:</span><span class="mi">145</span><span class="p">,</span><span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">stop_limit</span><span class="dl">"</span><span class="p">}};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// ------------------- </span>
+    <span class="c1">// Before sending message, make sure that your connection</span>
+    <span class="c1">// is authenticated (use public/auth call before) </span>
+    <span class="c1">// ------------------- </span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+<span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="mi">2148</span><span class="p">,</span><span class="s">"jsonrpc"</span><span class="p">:</span><span class="s">"2.0"</span><span class="p">,</span><span class="s">"method"</span><span class="p">:</span><span class="s">"private/sell"</span><span class="p">,</span><span class="s">"params"</span><span class="p">:{</span><span class="s">"amount"</span><span class="p">:</span><span class="mi">123</span><span class="p">,</span><span class="s">"instrument_name"</span><span class="p">:</span><span class="s">"ETH-PERPETUAL"</span><span class="p">,</span><span class="s">"price"</span><span class="p">:</span><span class="mf">145.61</span><span class="p">,</span><span class="s">"trigger"</span><span class="p">:</span><span class="s">"last_price"</span><span class="p">,</span><span class="s">"trigger_price"</span><span class="p">:</span><span class="mi">145</span><span class="p">,</span><span class="s">"type"</span><span class="p">:</span><span class="s">"stop_limit"</span><span class="p">}}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="c1">###############
+</span>       <span class="c1"># Before sending message, make sure that your connection
+</span>       <span class="c1"># is authenticated (use public/auth call before) 
+</span>       <span class="c1">###############
+</span>       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2148</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"trades"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="nl">"order"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"triggered"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"trigger"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last_price"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"time_in_force"</span><span class="p">:</span><span class="w"> </span><span class="s2">"good_til_cancelled"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"trigger_price"</span><span class="p">:</span><span class="w"> </span><span class="mi">145</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"reduce_only"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">145.61</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"post_only"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"order_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stop_limit"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"order_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"untriggered"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH-SLTS-28"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"max_show"</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"last_update_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1550659803407</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"is_rebalance"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"is_liquidation"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH-PERPETUAL"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sell"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"creation_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1550659803407</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"api"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div>
+<p>Places a sell order for an instrument.</p>
+<p><strong>Scope: </strong> <code>trade:read_write</code></p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsell" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div><div>  This is a matching engine method.</div></aside>
+<h3 id="parameters-52">Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>instrument_name</td>
+<td>true</td>
+<td>string</td>
+<td></td>
+<td>Instrument name</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin. The <code>amount</code> is a mandatory parameter if <code>contracts</code> parameter is missing. If both <code>contracts</code> and <code>amount</code> parameter are passed they must match each other otherwise error is returned.</td>
+</tr>
+<tr>
+<td>contracts</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>It represents the requested order size in contract units and can be passed instead of <code>amount</code>. The <code>contracts</code> is a mandatory parameter if <code>amount</code> parameter is missing. If both <code>contracts</code> and <code>amount</code> parameter are passed they must match each other otherwise error is returned.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>false</td>
+<td>string</td>
+<td><code>limit</code><br/><code>stop_limit</code><br/><code>take_limit</code><br/><code>market</code><br/><code>stop_market</code><br/><code>take_market</code><br/><code>market_limit</code><br/><code>trailing_stop</code></td>
+<td>The order type, default: <code>"limit"</code></td>
+</tr>
+<tr>
+<td>label</td>
+<td>false</td>
+<td>string</td>
+<td></td>
+<td>user defined label for the order (maximum 64 characters)</td>
+</tr>
+<tr>
+<td>price</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td><p>The order price in base currency (Only for limit and stop_limit orders)</p> <p>When adding an order with advanced=usd, the field price should be the option price value in USD.</p> <p>When adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example,  price=100, means implied volatility of 100%</p></td>
+</tr>
+<tr>
+<td>time_in_force</td>
+<td>false</td>
+<td>string</td>
+<td><code>good_til_cancelled</code><br/><code>good_til_day</code><br/><code>fill_or_kill</code><br/><code>immediate_or_cancel</code></td>
+<td><p>Specifies how long the order remains in effect. Default <code>"good_til_cancelled"</code></p> <ul> <li><code>"good_til_cancelled"</code> - unfilled order remains in order book until cancelled</li> <li><code>"good_til_day"</code> - unfilled order remains in order book till the end of the trading session</li> <li><code>"fill_or_kill"</code> - execute a transaction immediately and completely or not at all</li> <li><code>"immediate_or_cancel"</code> - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled</li> </ul></td>
+</tr>
+<tr>
+<td>display_amount</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>Initial display amount for iceberg order. Has to be at least 100 times minimum amount for instrument and ratio of hidden part vs visible part has to be less than 100 as well.</td>
+</tr>
+<tr>
+<td>post_only</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+<td><p>If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just above the spread.</p> <p>Only valid in combination with time_in_force=<code>"good_til_cancelled"</code></p></td>
+</tr>
+<tr>
+<td>reject_post_only</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+<td><p>If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected.</p> <p>Only valid in combination with <code>"post_only"</code> set to true</p></td>
+</tr>
+<tr>
+<td>reduce_only</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+<td>If <code>true</code>, the order is considered reduce-only which is intended to only reduce a current position</td>
+</tr>
+<tr>
+<td>trigger_price</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>Trigger price, required for trigger orders only (Stop-loss or Take-profit orders)</td>
+</tr>
+<tr>
+<td>trigger_offset</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>The maximum deviation from the price peak beyond which the order will be triggered</td>
+</tr>
+<tr>
+<td>trigger</td>
+<td>false</td>
+<td>string</td>
+<td><code>index_price</code><br/><code>mark_price</code><br/><code>last_price</code></td>
+<td>Defines the trigger type. Required for <code>"Stop-Loss"</code>, <code>"Take-Profit"</code> and <code>"Trailing"</code> trigger orders</td>
+</tr>
+<tr>
+<td>advanced</td>
+<td>false</td>
+<td>string</td>
+<td><code>usd</code><br/><code>implv</code></td>
+<td>Advanced option order type. (Only for options. Advanced USD orders are not supported for linear options.)</td>
+</tr>
+<tr>
+<td>mmp</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+<td>Order MMP flag, only for order_type 'limit'</td>
+</tr>
+<tr>
+<td>valid_until</td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+<td>Timestamp, when provided server will start processing request in Matching Engine only before given timestamp, in other cases <code>timed_out</code> error will be responded. Remember that the given timestamp should be consistent with the server's time, use <a href="#public-get_time">/public/time</a> method to obtain current server time.</td>
+</tr>
+<tr>
+<td>linked_order_type</td>
+<td>false</td>
+<td>string</td>
+<td><code>one_triggers_other</code><br/><code>one_cancels_other</code><br/><code>one_triggers_one_cancels_other</code></td>
+<td><p>The type of the linked order.</p> <ul> <li><code>"one_triggers_other"</code> - Execution of primary order triggers the placement of one or more secondary orders.</li> <li><code>"one_cancels_other"</code> -  The execution of one order in a pair automatically cancels the other, typically used to set a stop-loss and take-profit simultaneously.</li> <li><code>"one_triggers_one_cancels_other"</code> - The execution of a primary order triggers two secondary orders (a stop-loss and take-profit pair), where the execution of one secondary order cancels the other.</li> </ul></td>
+</tr>
+<tr>
+<td>trigger_fill_condition</td>
+<td>false</td>
+<td>string</td>
+<td><code>first_hit</code><br/><code>complete_fill</code><br/><code>incremental</code></td>
+<td><p>The fill condition of the linked order (Only for linked order types), default: <code>first_hit</code>.</p> <ul> <li><code>"first_hit"</code> - any execution of the primary order will fully cancel/place all secondary orders.</li> <li><code>"complete_fill"</code> - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders.</li> <li><code>"incremental"</code> - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.</li> </ul></td>
+</tr>
+<tr>
+<td>otoco_config</td>
+<td>false</td>
+<td>array of objects</td>
+<td></td>
+<td><p>List of trades to create or cancel when this order is filled.</p></td>
+</tr>
+<tr>
+<td>  ›  amount</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>  ›  direction</td>
+<td>true</td>
+<td>string</td>
+<td><code>buy</code><br/><code>sell</code></td>
+<td>Direction of trade from the maker perspective</td>
+</tr>
+<tr>
+<td>  ›  type</td>
+<td>false</td>
+<td>string</td>
+<td><code>limit</code><br/><code>stop_limit</code><br/><code>take_limit</code><br/><code>market</code><br/><code>stop_market</code><br/><code>take_market</code><br/><code>market_limit</code><br/><code>trailing_stop</code></td>
+<td>The order type, default: <code>"limit"</code></td>
+</tr>
+<tr>
+<td>  ›  label</td>
+<td>false</td>
+<td>string</td>
+<td></td>
+<td>user defined label for the order (maximum 64 characters)</td>
+</tr>
+<tr>
+<td>  ›  price</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td><p>The order price in base currency (Only for limit and stop_limit orders)</p> <p>When adding an order with advanced=usd, the field price should be the option price value in USD.</p> <p>When adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example,  price=100, means implied volatility of 100%</p></td>
+</tr>
+<tr>
+<td>  ›  reduce_only</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+<td>If <code>true</code>, the order is considered reduce-only which is intended to only reduce a current position</td>
+</tr>
+<tr>
+<td>  ›  time_in_force</td>
+<td>false</td>
+<td>string</td>
+<td><code>good_til_cancelled</code><br/><code>good_til_day</code><br/><code>fill_or_kill</code><br/><code>immediate_or_cancel</code></td>
+<td><p>Specifies how long the order remains in effect. Default <code>"good_til_cancelled"</code></p> <ul> <li><code>"good_til_cancelled"</code> - unfilled order remains in order book until cancelled</li> <li><code>"good_til_day"</code> - unfilled order remains in order book till the end of the trading session</li> <li><code>"fill_or_kill"</code> - execute a transaction immediately and completely or not at all</li> <li><code>"immediate_or_cancel"</code> - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled</li> </ul></td>
+</tr>
+<tr>
+<td>  ›  post_only</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+<td><p>If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (according to the direction of the order).</p> <p>Only valid in combination with time_in_force=<code>"good_til_cancelled"</code></p></td>
+</tr>
+<tr>
+<td>  ›  reject_post_only</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+<td><p>If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected.</p> <p>Only valid in combination with <code>"post_only"</code> set to true</p></td>
+</tr>
+<tr>
+<td>  ›  trigger_price</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>Trigger price, required for trigger orders only (Stop-loss or Take-profit orders)</td>
+</tr>
+<tr>
+<td>  ›  trigger_offset</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>The maximum deviation from the price peak beyond which the order will be triggered</td>
+</tr>
+<tr>
+<td>  ›  trigger</td>
+<td>false</td>
+<td>string</td>
+<td><code>index_price</code><br/><code>mark_price</code><br/><code>last_price</code></td>
+<td>Defines the trigger type. Required for <code>"Stop-Loss"</code>, <code>"Take-Profit"</code> and <code>"Trailing"</code> trigger orders</td>
+</tr>
+</tbody></table>
+<h3 id="response-52">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The id that was sent in the request</td>
+</tr>
+<tr>
+<td>jsonrpc</td>
+<td>string</td>
+<td>The JSON-RPC version (2.0)</td>
+</tr>
+<tr>
+<td>result</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  order</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  quote</td>
+<td>boolean</td>
+<td>If order is a quote. Present only if true.</td>
+</tr>
+<tr>
+<td>  ›    ›  triggered</td>
+<td>boolean</td>
+<td>Whether the trigger order has been triggered</td>
+</tr>
+<tr>
+<td>  ›    ›  mobile</td>
+<td>boolean</td>
+<td>optional field with value <code>true</code> added only when created with Mobile Application</td>
+</tr>
+<tr>
+<td>  ›    ›  app_name</td>
+<td>string</td>
+<td>The name of the application that placed the order on behalf of the user (optional).</td>
+</tr>
+<tr>
+<td>  ›    ›  implv</td>
+<td>number</td>
+<td>Implied volatility in percent. (Only if <code>advanced="implv"</code>)</td>
+</tr>
+<tr>
+<td>  ›    ›  refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
+<td>  ›    ›  usd</td>
+<td>number</td>
+<td>Option price in USD (Only if <code>advanced="usd"</code>)</td>
+</tr>
+<tr>
+<td>  ›    ›  oto_order_ids</td>
+<td>array of string</td>
+<td>The Ids of the orders that will be triggered if the order is filled</td>
+</tr>
+<tr>
+<td>  ›    ›  api</td>
+<td>boolean</td>
+<td><code>true</code> if created with API</td>
+</tr>
+<tr>
+<td>  ›    ›  average_price</td>
+<td>number</td>
+<td>Average fill price of the order</td>
+</tr>
+<tr>
+<td>  ›    ›  advanced</td>
+<td>string</td>
+<td>advanced type: <code>"usd"</code> or <code>"implv"</code> (Only for options; field is omitted if not applicable).</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  order_id</td>
+<td>string</td>
+<td>Unique order identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  post_only</td>
+<td>boolean</td>
+<td><code>true</code> for post-only orders only</td>
+</tr>
+<tr>
+<td>  ›    ›  filled_amount</td>
+<td>number</td>
+<td>Filled amount of the order. For perpetual and futures the filled_amount is in USD units, for options - in units or corresponding cryptocurrency contracts, e.g., BTC or ETH.</td>
+</tr>
+<tr>
+<td>  ›    ›  trigger</td>
+<td>string</td>
+<td>Trigger type (only for trigger orders). Allowed values: <code>"index_price"</code>, <code>"mark_price"</code>, <code>"last_price"</code>.</td>
+</tr>
+<tr>
+<td>  ›    ›  trigger_order_id</td>
+<td>string</td>
+<td>Id of the trigger order that created the order (Only for orders that were created by triggered orders).</td>
+</tr>
+<tr>
+<td>  ›    ›  direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>  ›    ›  contracts</td>
+<td>number</td>
+<td>It represents the order size in contract units. (Optional, may be absent in historical data).</td>
+</tr>
+<tr>
+<td>  ›    ›  is_secondary_oto</td>
+<td>boolean</td>
+<td><code>true</code> if the order is an order that can be triggered by another order, otherwise not present.</td>
+</tr>
+<tr>
+<td>  ›    ›  replaced</td>
+<td>boolean</td>
+<td><code>true</code> if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise <code>false</code>.</td>
+</tr>
+<tr>
+<td>  ›    ›  mmp_group</td>
+<td>string</td>
+<td>Name of the MMP group supplied in the <code>private/mass_quote</code> request.</td>
+</tr>
+<tr>
+<td>  ›    ›  mmp</td>
+<td>boolean</td>
+<td><code>true</code> if the order is a MMP order, otherwise <code>false</code>.</td>
+</tr>
+<tr>
+<td>  ›    ›  last_update_timestamp</td>
+<td>integer</td>
+<td>The timestamp (milliseconds since the Unix epoch)</td>
+</tr>
+<tr>
+<td>  ›    ›  creation_timestamp</td>
+<td>integer</td>
+<td>The timestamp (milliseconds since the Unix epoch)</td>
+</tr>
+<tr>
+<td>  ›    ›  cancel_reason</td>
+<td>string</td>
+<td>Enumerated reason behind cancel <code>"user_request"</code>, <code>"autoliquidation"</code>, <code>"cancel_on_disconnect"</code>, <code>"risk_mitigation"</code>, <code>"pme_risk_reduction"</code> (portfolio margining risk reduction), <code>"pme_account_locked"</code> (portfolio margining account locked per currency), <code>"position_locked"</code>, <code>"mmp_trigger"</code> (market maker protection), <code>"mmp_config_curtailment"</code> (market maker configured quantity decreased), <code>"edit_post_only_reject"</code> (cancelled on edit because of <code>reject_post_only</code> setting), <code>"oco_other_closed"</code> (the oco order linked to this order was closed), <code>"oto_primary_closed"</code> (the oto primary order that was going to trigger this order was cancelled), <code>"settlement"</code> (closed because of a settlement)</td>
+</tr>
+<tr>
+<td>  ›    ›  mmp_cancelled</td>
+<td>boolean</td>
+<td><code>true</code> if order was cancelled by mmp trigger (optional)</td>
+</tr>
+<tr>
+<td>  ›    ›  quote_id</td>
+<td>string</td>
+<td>The same QuoteID as supplied in the <code>private/mass_quote</code> request.</td>
+</tr>
+<tr>
+<td>  ›    ›  order_state</td>
+<td>string</td>
+<td>Order state: <code>"open"</code>, <code>"filled"</code>, <code>"rejected"</code>, <code>"cancelled"</code>, <code>"untriggered"</code></td>
+</tr>
+<tr>
+<td>  ›    ›  is_rebalance</td>
+<td>boolean</td>
+<td>Optional (only for spot). <code>true</code> if order was automatically created during cross-collateral balance restoration</td>
+</tr>
+<tr>
+<td>  ›    ›  reject_post_only</td>
+<td>boolean</td>
+<td><code>true</code> if order has <code>reject_post_only</code> flag (field is present only when <code>post_only</code> is <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›    ›  label</td>
+<td>string</td>
+<td>User defined label (up to 64 characters)</td>
+</tr>
+<tr>
+<td>  ›    ›  is_liquidation</td>
+<td>boolean</td>
+<td>Optional (not added for spot). <code>true</code> if order was automatically created during liquidation</td>
+</tr>
+<tr>
+<td>  ›    ›  price</td>
+<td>number or string</td>
+<td>Price in base currency or "market_price" in case of open trigger market orders</td>
+</tr>
+<tr>
+<td>  ›    ›  web</td>
+<td>boolean</td>
+<td><code>true</code> if created via Deribit frontend (optional)</td>
+</tr>
+<tr>
+<td>  ›    ›  time_in_force</td>
+<td>string</td>
+<td>Order time in force: <code>"good_til_cancelled"</code>, <code>"good_til_day"</code>, <code>"fill_or_kill"</code> or <code>"immediate_or_cancel"</code></td>
+</tr>
+<tr>
+<td>  ›    ›  trigger_reference_price</td>
+<td>number</td>
+<td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
+</tr>
+<tr>
+<td>  ›    ›  display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
+<td>  ›    ›  order_type</td>
+<td>string</td>
+<td>Order type: <code>"limit"</code>, <code>"market"</code>, <code>"stop_limit"</code>, <code>"stop_market"</code></td>
+</tr>
+<tr>
+<td>  ›    ›  is_primary_otoco</td>
+<td>boolean</td>
+<td><code>true</code> if the order is an order that can trigger an OCO pair, otherwise not present.</td>
+</tr>
+<tr>
+<td>  ›    ›  original_order_type</td>
+<td>string</td>
+<td>Original order type. Optional field</td>
+</tr>
+<tr>
+<td>  ›    ›  block_trade</td>
+<td>boolean</td>
+<td><code>true</code> if order made from block_trade trade, added only in that case.</td>
+</tr>
+<tr>
+<td>  ›    ›  trigger_price</td>
+<td>number</td>
+<td>Trigger price (Only for future trigger orders)</td>
+</tr>
+<tr>
+<td>  ›    ›  oco_ref</td>
+<td>string</td>
+<td>Unique reference that identifies a one_cancels_others (OCO) pair.</td>
+</tr>
+<tr>
+<td>  ›    ›  trigger_offset</td>
+<td>number</td>
+<td>The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)</td>
+</tr>
+<tr>
+<td>  ›    ›  quote_set_id</td>
+<td>string</td>
+<td>Identifier of the QuoteSet supplied in the <code>private/mass_quote</code> request.</td>
+</tr>
+<tr>
+<td>  ›    ›  auto_replaced</td>
+<td>boolean</td>
+<td>Options, advanced orders only - <code>true</code> if last modification of the order was performed by the pricing engine, otherwise <code>false</code>.</td>
+</tr>
+<tr>
+<td>  ›    ›  reduce_only</td>
+<td>boolean</td>
+<td>Optional (not added for spot). '<code>true</code> for reduce-only orders only'</td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>number</td>
+<td>It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>  ›    ›  risk_reducing</td>
+<td>boolean</td>
+<td><code>true</code> if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise <code>false</code>.</td>
+</tr>
+<tr>
+<td>  ›    ›  instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  trigger_fill_condition</td>
+<td>string</td>
+<td><p>The fill condition of the linked order (Only for linked order types), default: <code>first_hit</code>.</p> <ul> <li><code>"first_hit"</code> - any execution of the primary order will fully cancel/place all secondary orders.</li> <li><code>"complete_fill"</code> - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders.</li> <li><code>"incremental"</code> - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.</li> </ul></td>
+</tr>
+<tr>
+<td>  ›    ›  primary_order_id</td>
+<td>string</td>
+<td>Unique order identifier</td>
+</tr>
+<tr>
+<td>  ›  trades</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  trade_id</td>
+<td>string</td>
+<td>Unique (per currency) trade identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  tick_direction</td>
+<td>integer</td>
+<td>Direction of the "tick" (<code>0</code> = Plus Tick, <code>1</code> = Zero-Plus Tick, <code>2</code> = Minus Tick, <code>3</code> = Zero-Minus Tick).</td>
+</tr>
+<tr>
+<td>  ›    ›  fee_currency</td>
+<td>string</td>
+<td>Currency, i.e <code>"BTC"</code>, <code>"ETH"</code>, <code>"USDC"</code></td>
+</tr>
+<tr>
+<td>  ›    ›  api</td>
+<td>boolean</td>
+<td><code>true</code> if user order was created with API</td>
+</tr>
+<tr>
+<td>  ›    ›  advanced</td>
+<td>string</td>
+<td>Advanced type of user order: <code>"usd"</code> or <code>"implv"</code> (only for options; omitted if not applicable)</td>
+</tr>
+<tr>
+<td>  ›    ›  order_id</td>
+<td>string</td>
+<td>Id of the user order (maker or taker), i.e. subscriber's order id that took part in the trade</td>
+</tr>
+<tr>
+<td>  ›    ›  liquidity</td>
+<td>string</td>
+<td>Describes what was role of users order: <code>"M"</code> when it was maker order, <code>"T"</code> when it was taker order</td>
+</tr>
+<tr>
+<td>  ›    ›  post_only</td>
+<td>string</td>
+<td><code>true</code> if user order is post-only</td>
+</tr>
+<tr>
+<td>  ›    ›  direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>  ›    ›  contracts</td>
+<td>number</td>
+<td>Trade size in contract units (optional, may be absent in historical trades)</td>
+</tr>
+<tr>
+<td>  ›    ›  mmp</td>
+<td>boolean</td>
+<td><code>true</code> if user order is MMP</td>
+</tr>
+<tr>
+<td>  ›    ›  fee</td>
+<td>number</td>
+<td>User's fee in units of the specified <code>fee_currency</code></td>
+</tr>
+<tr>
+<td>  ›    ›  quote_id</td>
+<td>string</td>
+<td>QuoteID of the user order (optional, present only for orders placed with <code>private/mass_quote</code>)</td>
+</tr>
+<tr>
+<td>  ›    ›  index_price</td>
+<td>number</td>
+<td>Index Price at the moment of trade</td>
+</tr>
+<tr>
+<td>  ›    ›  label</td>
+<td>string</td>
+<td>User defined label (presented only when previously set for order by user)</td>
+</tr>
+<tr>
+<td>  ›    ›  block_trade_id</td>
+<td>string</td>
+<td>Block trade id - when trade was part of a block trade</td>
+</tr>
+<tr>
+<td>  ›    ›  price</td>
+<td>number</td>
+<td>Price in base currency</td>
+</tr>
+<tr>
+<td>  ›    ›  combo_id</td>
+<td>string</td>
+<td>Optional field containing combo instrument name if the trade is a combo trade</td>
+</tr>
+<tr>
+<td>  ›    ›  matching_id</td>
+<td>string</td>
+<td>Always <code>null</code></td>
+</tr>
+<tr>
+<td>  ›    ›  order_type</td>
+<td>string</td>
+<td>Order type: <code>"limit</code>, <code>"market"</code>, or <code>"liquidation"</code></td>
+</tr>
+<tr>
+<td>  ›    ›  trade_allocations</td>
+<td>array of <em>object</em></td>
+<td>List of allocations for Block RFQ pre-allocation. Each allocation specifies <code>user_id</code>, <code>amount</code>, and <code>fee</code> for the allocated part of the trade. For broker client allocations, a <code>client_info</code> object will be included.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  amount</td>
+<td>number</td>
+<td>Amount allocated to this user.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  client_info</td>
+<td><em>object</em></td>
+<td>Optional client allocation info for brokers.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›    ›  client_id</td>
+<td>integer</td>
+<td>ID of a client; available to broker. Represents a group of users under a common name.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›    ›  client_link_id</td>
+<td>integer</td>
+<td>ID assigned to a single user in a client; available to broker.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›    ›  name</td>
+<td>string</td>
+<td>Name of the linked user within the client; available to broker.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  fee</td>
+<td>number</td>
+<td>Fee for the allocated part of the trade.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  user_id</td>
+<td>integer</td>
+<td>User ID to which part of the trade is allocated. For brokers the User ID is obstructed.</td>
+</tr>
+<tr>
+<td>  ›    ›  profit_loss</td>
+<td>number</td>
+<td>Profit and loss in base currency.</td>
+</tr>
+<tr>
+<td>  ›    ›  timestamp</td>
+<td>integer</td>
+<td>The timestamp of the trade (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>  ›    ›  iv</td>
+<td>number</td>
+<td>Option implied volatility for the price (Option only)</td>
+</tr>
+<tr>
+<td>  ›    ›  state</td>
+<td>string</td>
+<td>Order state: <code>"open"</code>, <code>"filled"</code>, <code>"rejected"</code>, <code>"cancelled"</code>, <code>"untriggered"</code> or <code>"archive"</code> (if order was archived)</td>
+</tr>
+<tr>
+<td>  ›    ›  underlying_price</td>
+<td>number</td>
+<td>Underlying price for implied volatility calculations (Options only)</td>
+</tr>
+<tr>
+<td>  ›    ›  block_rfq_quote_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ quote - when trade was part of the Block RFQ</td>
+</tr>
+<tr>
+<td>  ›    ›  quote_set_id</td>
+<td>string</td>
+<td>QuoteSet of the user order (optional, present only for orders placed with <code>private/mass_quote</code>)</td>
+</tr>
+<tr>
+<td>  ›    ›  mark_price</td>
+<td>number</td>
+<td>Mark Price at the moment of trade</td>
+</tr>
+<tr>
+<td>  ›    ›  block_rfq_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ - when trade was part of the Block RFQ</td>
+</tr>
+<tr>
+<td>  ›    ›  combo_trade_id</td>
+<td>number</td>
+<td>Optional field containing combo trade identifier if the trade is a combo trade</td>
+</tr>
+<tr>
+<td>  ›    ›  reduce_only</td>
+<td>string</td>
+<td><code>true</code> if user order is reduce-only</td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>number</td>
+<td>Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>  ›    ›  liquidation</td>
+<td>string</td>
+<td>Optional field (only for trades caused by liquidation): <code>"M"</code> when maker side of trade was under liquidation, <code>"T"</code> when taker side was under liquidation, <code>"MT"</code> when both sides of trade were under liquidation</td>
+</tr>
+<tr>
+<td>  ›    ›  trade_seq</td>
+<td>integer</td>
+<td>The sequence number of the trade within instrument</td>
+</tr>
+<tr>
+<td>  ›    ›  risk_reducing</td>
+<td>boolean</td>
+<td><code>true</code> if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)</td>
+</tr>
+<tr>
+<td>  ›    ›  instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  legs</td>
+<td>array</td>
+<td>Optional field containing leg trades if trade is a combo trade (present when querying for <strong>only</strong> combo trades and in <code>combo_trades</code> events)</td>
+</tr>
+</tbody></table>

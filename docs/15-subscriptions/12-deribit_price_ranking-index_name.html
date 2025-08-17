@@ -1,0 +1,112 @@
+<h2 id="deribit_price_ranking-index_name">deribit_price_ranking.{index_name}</h2>
+<blockquote>
+<p><em>Subscriptions are only available via websockets.</em></p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// To subscribe to this channel:</span>
+<span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+    <span class="p">{</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">public/subscribe</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">channels</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">deribit_price_ranking.btc_usd</span><span class="dl">"</span><span class="p">]}</span>
+    <span class="p">};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the notifications...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># To subscribe to this channel:
+</span><span class="n">msg</span> <span class="o">=</span> \
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="p">:</span> <span class="s">"2.0"</span><span class="p">,</span>
+     <span class="s">"method"</span><span class="p">:</span> <span class="s">"public/subscribe"</span><span class="p">,</span>
+     <span class="s">"id"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="s">"params"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">"channels"</span><span class="p">:</span> <span class="p">[</span><span class="s">"deribit_price_ranking.btc_usd"</span><span class="p">]}</span>
+    <span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the notifications...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>This subscription will send next notifications like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="nl">"method"</span><span class="p">:</span><span class="s2">"subscription"</span><span class="p">,</span><span class="nl">"params"</span><span class="p">:{</span><span class="nl">"channel"</span><span class="p">:</span><span class="s2">"deribit_price_ranking.btc_usd"</span><span class="p">,</span><span class="nl">"data"</span><span class="p">:[{</span><span class="nl">"enabled"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"identifier"</span><span class="p">:</span><span class="s2">"bitfinex"</span><span class="p">,</span><span class="nl">"original_price"</span><span class="p">:</span><span class="mf">41160.5</span><span class="p">,</span><span class="nl">"price"</span><span class="p">:</span><span class="mf">41160.5</span><span class="p">,</span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1702465142997</span><span class="p">,</span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">14.285714</span><span class="p">},{</span><span class="nl">"enabled"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"identifier"</span><span class="p">:</span><span class="s2">"bitstamp"</span><span class="p">,</span><span class="nl">"original_price"</span><span class="p">:</span><span class="mi">41119</span><span class="p">,</span><span class="nl">"price"</span><span class="p">:</span><span class="mi">41119</span><span class="p">,</span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1702465143045</span><span class="p">,</span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">14.285714</span><span class="p">},{</span><span class="nl">"enabled"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"identifier"</span><span class="p">:</span><span class="s2">"coinbase"</span><span class="p">,</span><span class="nl">"original_price"</span><span class="p">:</span><span class="mf">41115.53</span><span class="p">,</span><span class="nl">"price"</span><span class="p">:</span><span class="mf">41115.53</span><span class="p">,</span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1702465139000</span><span class="p">,</span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">14.285714</span><span class="p">},{</span><span class="nl">"enabled"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"identifier"</span><span class="p">:</span><span class="s2">"gemini"</span><span class="p">,</span><span class="nl">"original_price"</span><span class="p">:</span><span class="mf">41116.42</span><span class="p">,</span><span class="nl">"price"</span><span class="p">:</span><span class="mf">41116.42</span><span class="p">,</span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1702465142921</span><span class="p">,</span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">14.285714</span><span class="p">},{</span><span class="nl">"enabled"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"identifier"</span><span class="p">:</span><span class="s2">"itbit"</span><span class="p">,</span><span class="nl">"original_price"</span><span class="p">:</span><span class="mf">41108.88</span><span class="p">,</span><span class="nl">"price"</span><span class="p">:</span><span class="mf">41108.88</span><span class="p">,</span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1702465141954</span><span class="p">,</span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">14.285714</span><span class="p">},{</span><span class="nl">"enabled"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"identifier"</span><span class="p">:</span><span class="s2">"kraken"</span><span class="p">,</span><span class="nl">"original_price"</span><span class="p">:</span><span class="mf">41108.35</span><span class="p">,</span><span class="nl">"price"</span><span class="p">:</span><span class="mf">41108.35</span><span class="p">,</span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1702465142906</span><span class="p">,</span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">14.285714</span><span class="p">},{</span><span class="nl">"enabled"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"identifier"</span><span class="p">:</span><span class="s2">"okcoin"</span><span class="p">,</span><span class="nl">"original_price"</span><span class="p">:</span><span class="mf">41139.82</span><span class="p">,</span><span class="nl">"price"</span><span class="p">:</span><span class="mf">41139.82</span><span class="p">,</span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1702465138000</span><span class="p">,</span><span class="nl">"weight"</span><span class="p">:</span><span class="mf">14.285714</span><span class="p">}]}}</span><span class="w">
+</span></code></pre></div>
+<p>Provides information about current value (price) for stock exchanges used to calculate Deribit Index</p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&amp;channels=deribit_price_ranking.%7Bindex_name%7D" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<h3 id="channel-parameters-12">Channel Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>index_name</td>
+<td>true</td>
+<td>string</td>
+<td><code>btc_usd</code><br/><code>eth_usd</code><br/><code>ada_usdc</code><br/><code>algo_usdc</code><br/><code>avax_usdc</code><br/><code>bch_usdc</code><br/><code>bnb_usdc</code><br/><code>btc_usdc</code><br/><code>btcdvol_usdc</code><br/><code>buidl_usdc</code><br/><code>doge_usdc</code><br/><code>dot_usdc</code><br/><code>eurr_usdc</code><br/><code>eth_usdc</code><br/><code>ethdvol_usdc</code><br/><code>link_usdc</code><br/><code>ltc_usdc</code><br/><code>near_usdc</code><br/><code>paxg_usdc</code><br/><code>shib_usdc</code><br/><code>sol_usdc</code><br/><code>steth_usdc</code><br/><code>ton_usdc</code><br/><code>trump_usdc</code><br/><code>trx_usdc</code><br/><code>uni_usdc</code><br/><code>usde_usdc</code><br/><code>usyc_usdc</code><br/><code>xrp_usdc</code><br/><code>btc_usdt</code><br/><code>eth_usdt</code><br/><code>eurr_usdt</code><br/><code>sol_usdt</code><br/><code>steth_usdt</code><br/><code>usdc_usdt</code><br/><code>usde_usdt</code><br/><code>btc_eurr</code><br/><code>btc_usde</code><br/><code>btc_usyc</code><br/><code>eth_btc</code><br/><code>eth_eurr</code><br/><code>eth_usde</code><br/><code>eth_usyc</code><br/><code>steth_eth</code><br/><code>paxg_btc</code></td>
+<td>Index identifier, matches (base) cryptocurrency with quote currency</td>
+</tr>
+</tbody></table>
+<h3 id="response-188">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>data</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  enabled</td>
+<td>boolean</td>
+<td>Stock exchange status</td>
+</tr>
+<tr>
+<td>  ›  identifier</td>
+<td>string</td>
+<td>Stock exchange identifier</td>
+</tr>
+<tr>
+<td>  ›  original_price</td>
+<td>number</td>
+<td>Index price retrieved from stock's data</td>
+</tr>
+<tr>
+<td>  ›  price</td>
+<td>number</td>
+<td>Adjusted stock exchange index price, used for Deribit price index calculations</td>
+</tr>
+<tr>
+<td>  ›  timestamp</td>
+<td>integer</td>
+<td>The timestamp of the last update from stock exchange (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>  ›  weight</td>
+<td>number</td>
+<td>The weight of the ranking given in percent</td>
+</tr>
+</tbody></table>

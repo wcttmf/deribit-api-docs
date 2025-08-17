@@ -1,0 +1,295 @@
+<h2 id="public-ticker">/public/ticker</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/public/ticker?instrument_name=BTC-PERPETUAL"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+<span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">8106</span><span class="p">,</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">public/ticker</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:{</span><span class="dl">"</span><span class="s2">instrument_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC-PERPETUAL</span><span class="dl">"</span><span class="p">}};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+<span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="mi">8106</span><span class="p">,</span><span class="s">"jsonrpc"</span><span class="p">:</span><span class="s">"2.0"</span><span class="p">,</span><span class="s">"method"</span><span class="p">:</span><span class="s">"public/ticker"</span><span class="p">,</span><span class="s">"params"</span><span class="p">:{</span><span class="s">"instrument_name"</span><span class="p">:</span><span class="s">"BTC-PERPETUAL"</span><span class="p">}}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">8106</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"best_ask_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">53040</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"best_ask_price"</span><span class="p">:</span><span class="w"> </span><span class="mi">36290</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"best_bid_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4600</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"best_bid_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">36289.5</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"current_funding"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"estimated_delivery_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">36297.02</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"funding_8h"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00002203</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"index_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">36297.02</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-PERPETUAL"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"interest_value"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.7362511643080387</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"last_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">36289.5</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">36288.31</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"max_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">36833.4</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"min_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">35744.73</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"open_interest"</span><span class="p">:</span><span class="w"> </span><span class="mi">502231260</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"settlement_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">36169.49</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"stats"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"high"</span><span class="p">:</span><span class="w"> </span><span class="mf">36824.5</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"low"</span><span class="p">:</span><span class="w"> </span><span class="mf">35213.5</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"price_change"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2362</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"volume"</span><span class="p">:</span><span class="w"> </span><span class="mf">7831.26548117</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"volume_usd"</span><span class="p">:</span><span class="w"> </span><span class="mi">282615600</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1623059681955</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div>
+<p>Get ticker for an instrument.</p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fpublic%2Fticker" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<h3 id="parameters-50">Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>instrument_name</td>
+<td>true</td>
+<td>string</td>
+<td></td>
+<td>Instrument name</td>
+</tr>
+</tbody></table>
+<h3 id="response-50">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The id that was sent in the request</td>
+</tr>
+<tr>
+<td>jsonrpc</td>
+<td>string</td>
+<td>The JSON-RPC version (2.0)</td>
+</tr>
+<tr>
+<td>result</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  ask_iv</td>
+<td>number</td>
+<td>(Only for option) implied volatility for best ask</td>
+</tr>
+<tr>
+<td>  ›  best_ask_amount</td>
+<td>number</td>
+<td>It represents the requested order size of all best asks</td>
+</tr>
+<tr>
+<td>  ›  best_ask_price</td>
+<td>number</td>
+<td>The current best ask price, <code>null</code> if there aren't any asks</td>
+</tr>
+<tr>
+<td>  ›  best_bid_amount</td>
+<td>number</td>
+<td>It represents the requested order size of all best bids</td>
+</tr>
+<tr>
+<td>  ›  best_bid_price</td>
+<td>number</td>
+<td>The current best bid price, <code>null</code> if there aren't any bids</td>
+</tr>
+<tr>
+<td>  ›  bid_iv</td>
+<td>number</td>
+<td>(Only for option) implied volatility for best bid</td>
+</tr>
+<tr>
+<td>  ›  current_funding</td>
+<td>number</td>
+<td>Current funding (perpetual only)</td>
+</tr>
+<tr>
+<td>  ›  delivery_price</td>
+<td>number</td>
+<td>The settlement price for the instrument. Only when <code>state = closed</code></td>
+</tr>
+<tr>
+<td>  ›  estimated_delivery_price</td>
+<td>number</td>
+<td>Estimated delivery price for the market. For more details, see Contract Specification &gt; General Documentation &gt; Expiration Price</td>
+</tr>
+<tr>
+<td>  ›  funding_8h</td>
+<td>number</td>
+<td>Funding 8h (perpetual only)</td>
+</tr>
+<tr>
+<td>  ›  greeks</td>
+<td><em>object</em></td>
+<td>Only for options</td>
+</tr>
+<tr>
+<td>  ›    ›  delta</td>
+<td>number</td>
+<td>(Only for option) The delta value for the option</td>
+</tr>
+<tr>
+<td>  ›    ›  gamma</td>
+<td>number</td>
+<td>(Only for option) The gamma value for the option</td>
+</tr>
+<tr>
+<td>  ›    ›  rho</td>
+<td>number</td>
+<td>(Only for option) The rho value for the option</td>
+</tr>
+<tr>
+<td>  ›    ›  theta</td>
+<td>number</td>
+<td>(Only for option) The theta value for the option</td>
+</tr>
+<tr>
+<td>  ›    ›  vega</td>
+<td>number</td>
+<td>(Only for option) The vega value for the option</td>
+</tr>
+<tr>
+<td>  ›  index_price</td>
+<td>number</td>
+<td>Current index price</td>
+</tr>
+<tr>
+<td>  ›  instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>  ›  interest_rate</td>
+<td>number</td>
+<td>Interest rate used in implied volatility calculations (options only)</td>
+</tr>
+<tr>
+<td>  ›  interest_value</td>
+<td>number</td>
+<td>Value used to calculate <code>realized_funding</code> in positions (perpetual only)</td>
+</tr>
+<tr>
+<td>  ›  last_price</td>
+<td>number</td>
+<td>The price for the last trade</td>
+</tr>
+<tr>
+<td>  ›  mark_iv</td>
+<td>number</td>
+<td>(Only for option) implied volatility for mark price</td>
+</tr>
+<tr>
+<td>  ›  mark_price</td>
+<td>number</td>
+<td>The mark price for the instrument</td>
+</tr>
+<tr>
+<td>  ›  max_price</td>
+<td>number</td>
+<td>The maximum price for the future. Any buy orders you submit higher than this price, will be clamped to this maximum.</td>
+</tr>
+<tr>
+<td>  ›  min_price</td>
+<td>number</td>
+<td>The minimum price for the future. Any sell orders you submit lower than this price will be clamped to this minimum.</td>
+</tr>
+<tr>
+<td>  ›  open_interest</td>
+<td>number</td>
+<td>The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>  ›  settlement_price</td>
+<td>number</td>
+<td>Optional (not added for spot). The settlement price for the instrument. Only when <code>state = open</code></td>
+</tr>
+<tr>
+<td>  ›  state</td>
+<td>string</td>
+<td>The state of the order book. Possible values are <code>open</code> and <code>closed</code>.</td>
+</tr>
+<tr>
+<td>  ›  stats</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  high</td>
+<td>number</td>
+<td>Highest price during 24h</td>
+</tr>
+<tr>
+<td>  ›    ›  low</td>
+<td>number</td>
+<td>Lowest price during 24h</td>
+</tr>
+<tr>
+<td>  ›    ›  price_change</td>
+<td>number</td>
+<td>24-hour price change expressed as a percentage, <code>null</code> if there weren't any trades</td>
+</tr>
+<tr>
+<td>  ›    ›  volume</td>
+<td>number</td>
+<td>Volume during last 24h in base currency</td>
+</tr>
+<tr>
+<td>  ›    ›  volume_usd</td>
+<td>number</td>
+<td>Volume in usd (futures only)</td>
+</tr>
+<tr>
+<td>  ›  timestamp</td>
+<td>integer</td>
+<td>The timestamp (milliseconds since the Unix epoch)</td>
+</tr>
+<tr>
+<td>  ›  underlying_index</td>
+<td>number</td>
+<td>Name of the underlying future, or <code>index_price</code> (options only)</td>
+</tr>
+<tr>
+<td>  ›  underlying_price</td>
+<td>number</td>
+<td>Underlying price for implied volatility calculations (options only)</td>
+</tr>
+</tbody></table>
+<h1 id="trading">Trading</h1>

@@ -1,0 +1,37 @@
+<h2 id="notifications">Notifications</h2>
+<blockquote>
+<p>An example of a notification:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"subscription"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"params"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"deribit_price_index.btc_usd"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1535098298227</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">6521.17</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>API users can subscribe to certain types of notifications. This means that they
+will receive JSON-RPC notification-messages from the server when certain
+events occur, such as changes to the index price or changes to the order
+book for a certain instrument. </p>
+<p>The API methods <a href="#public-subscribe">public/subscribe</a> and
+<a href="#private-subscribe">private/subscribe</a> are used to set up a subscription.
+Since HTTP does not support the sending of messages from server to client,
+these methods are only available when using the Websocket transport
+mechanism.</p>
+<p>At the moment of subscription a "channel"
+must be specified. The channel determines the type of events that will be
+received.  See <a href="#subscriptions">Subscriptions</a> for more details about the channels.</p>
+<p>In accordance with the JSON-RPC specification, the format of a notification 
+is that of a request message without an <code>id</code> field. The value of the
+<code>method</code> field will always be <code>"subscription"</code>. The
+<code>params</code> field will always be an object with 2 members:
+<code>channel</code> and <code>data</code>. The value of the
+<code>channel</code> member is the name of the channel (a string). The
+value of the <code>data</code> member is an object that contains data 
+that is specific for the channel.</p>

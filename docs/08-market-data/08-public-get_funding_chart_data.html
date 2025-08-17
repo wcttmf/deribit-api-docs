@@ -1,0 +1,138 @@
+<h2 id="public-get_funding_chart_data">/public/get_funding_chart_data</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/public/get_funding_chart_data?instrument_name=BTC-PERPETUAL&amp;length=8h"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+    <span class="p">{</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">public/get_funding_chart_data</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">instrument_name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">BTC-PERPETUAL</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">length</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">8h</span><span class="dl">"</span><span class="p">}</span>
+    <span class="p">};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="p">:</span> <span class="s">"2.0"</span><span class="p">,</span>
+     <span class="s">"method"</span><span class="p">:</span> <span class="s">"public/get_funding_chart_data"</span><span class="p">,</span>
+     <span class="s">"id"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="s">"params"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">"instrument_name"</span><span class="p">:</span> <span class="s">"BTC-PERPETUAL"</span><span class="p">,</span>
+        <span class="s">"length"</span><span class="p">:</span> <span class="s">"8h"</span><span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"current_interest"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0050006706</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                </span><span class="nl">"index_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">8247.27</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"interest_8h"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0049995114</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1536569522277</span><span class="w">
+            </span><span class="p">}],</span><span class="w">
+        </span><span class="nl">"interest_8h"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0040080897</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Retrieve the list of the latest PERPETUAL funding chart points within a given time period.</p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fpublic%2Fget_funding_chart_data" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<h3 id="parameters-27">Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>instrument_name</td>
+<td>true</td>
+<td>string</td>
+<td></td>
+<td>Instrument name</td>
+</tr>
+<tr>
+<td>length</td>
+<td>true</td>
+<td>string</td>
+<td><code>8h</code><br/><code>24h</code><br/><code>1m</code></td>
+<td>Specifies time period. <code>8h</code> - 8 hours, <code>24h</code> - 24 hours, <code>1m</code> - 1 month</td>
+</tr>
+</tbody></table>
+<h3 id="response-27">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The id that was sent in the request</td>
+</tr>
+<tr>
+<td>jsonrpc</td>
+<td>string</td>
+<td>The JSON-RPC version (2.0)</td>
+</tr>
+<tr>
+<td>result</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  current_interest</td>
+<td>number</td>
+<td>Current interest</td>
+</tr>
+<tr>
+<td>  ›  data</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  index_price</td>
+<td>number</td>
+<td>Current index price</td>
+</tr>
+<tr>
+<td>  ›    ›  interest_8h</td>
+<td>number</td>
+<td>Historical interest 8h value</td>
+</tr>
+<tr>
+<td>  ›    ›  timestamp</td>
+<td>integer</td>
+<td>The timestamp (milliseconds since the Unix epoch)</td>
+</tr>
+<tr>
+<td>  ›  interest_8h</td>
+<td>number</td>
+<td>Current interest 8h</td>
+</tr>
+</tbody></table>

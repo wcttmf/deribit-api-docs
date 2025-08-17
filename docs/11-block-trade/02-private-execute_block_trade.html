@@ -1,0 +1,455 @@
+<h2 id="private-execute_block_trade">/private/execute_block_trade</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/execute_block_trade?counterparty_signature=1590485595899.1Mn52L_Q.lNyNBzXXo-_QBT_wDuMgnhA7uS9tBqdQ5TLN6rxbuoAiQhyaJYGJrm5IV_9enp9niY_x8D60AJLm3yEKPUY1Dv3T0TW0n5-ADPpJF7Fpj0eVDZpZ6QCdX8snBWrSJ0TtqevnO64RCBlN1dIm2T70PP9dlhiqPDAUYI4fpB1vLYI&amp;nonce=bszyprbq&amp;role=maker&amp;timestamp=1590485535899&amp;trades=%5B%7B%22amount%22%3A200000%2C%22direction%22%3A%22sell%22%2C%22instrument_name%22%3A%22BTC-PERPETUAL%22%2C%22price%22%3A8.9e3%7D%2C%7B%22amount%22%3A5.0%2C%22direction%22%3A%22sell%22%2C%22instrument_name%22%3A%22BTC-28MAY20-9000-C%22%2C%22price%22%3A0.0133%7D%5D"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+<span class="p">{</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">private/execute_block_trade</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:{</span><span class="dl">"</span><span class="s2">counterparty_signature</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1590485595899.1Mn52L_Q.lNyNBzXXo-_QBT_wDuMgnhA7uS9tBqdQ5TLN6rxbuoAiQhyaJYGJrm5IV_9enp9niY_x8D60AJLm3yEKPUY1Dv3T0TW0n5-ADPpJF7Fpj0eVDZpZ6QCdX8snBWrSJ0TtqevnO64RCBlN1dIm2T70PP9dlhiqPDAUYI4fpB1vLYI</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">nonce</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">bszyprbq</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">role</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">maker</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">timestamp</span><span class="dl">"</span><span class="p">:</span><span class="mi">1590485535899</span><span class="p">,</span><span class="dl">"</span><span class="s2">trades</span><span class="dl">"</span><span class="p">:[{</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="mi">200000</span><span class="p">,</span><span class="dl">"</span><span class="s2">direction</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">sell</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">instrument_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC-PERPETUAL</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">price</span><span class="dl">"</span><span class="p">:</span><span class="mf">8.9e3</span><span class="p">},{</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="mf">5.0</span><span class="p">,</span><span class="dl">"</span><span class="s2">direction</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">sell</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">instrument_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC-28MAY20-9000-C</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">price</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0133</span><span class="p">}]}};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// ------------------- </span>
+    <span class="c1">// Before sending message, make sure that your connection</span>
+    <span class="c1">// is authenticated (use public/auth call before) </span>
+    <span class="c1">// ------------------- </span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+<span class="p">{</span><span class="s">"jsonrpc"</span><span class="p">:</span><span class="s">"2.0"</span><span class="p">,</span><span class="s">"method"</span><span class="p">:</span><span class="s">"private/execute_block_trade"</span><span class="p">,</span><span class="s">"params"</span><span class="p">:{</span><span class="s">"counterparty_signature"</span><span class="p">:</span><span class="s">"1590485595899.1Mn52L_Q.lNyNBzXXo-_QBT_wDuMgnhA7uS9tBqdQ5TLN6rxbuoAiQhyaJYGJrm5IV_9enp9niY_x8D60AJLm3yEKPUY1Dv3T0TW0n5-ADPpJF7Fpj0eVDZpZ6QCdX8snBWrSJ0TtqevnO64RCBlN1dIm2T70PP9dlhiqPDAUYI4fpB1vLYI"</span><span class="p">,</span><span class="s">"nonce"</span><span class="p">:</span><span class="s">"bszyprbq"</span><span class="p">,</span><span class="s">"role"</span><span class="p">:</span><span class="s">"maker"</span><span class="p">,</span><span class="s">"timestamp"</span><span class="p">:</span><span class="mi">1590485535899</span><span class="p">,</span><span class="s">"trades"</span><span class="p">:[{</span><span class="s">"amount"</span><span class="p">:</span><span class="mi">200000</span><span class="p">,</span><span class="s">"direction"</span><span class="p">:</span><span class="s">"sell"</span><span class="p">,</span><span class="s">"instrument_name"</span><span class="p">:</span><span class="s">"BTC-PERPETUAL"</span><span class="p">,</span><span class="s">"price"</span><span class="p">:</span><span class="mf">8.9e3</span><span class="p">},{</span><span class="s">"amount"</span><span class="p">:</span><span class="mf">5.0</span><span class="p">,</span><span class="s">"direction"</span><span class="p">:</span><span class="s">"sell"</span><span class="p">,</span><span class="s">"instrument_name"</span><span class="p">:</span><span class="s">"BTC-28MAY20-9000-C"</span><span class="p">,</span><span class="s">"price"</span><span class="p">:</span><span class="mf">0.0133</span><span class="p">}]}}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="c1">###############
+</span>       <span class="c1"># Before sending message, make sure that your connection
+</span>       <span class="c1"># is authenticated (use public/auth call before) 
+</span>       <span class="c1">###############
+</span>       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:{</span><span class="w">
+    </span><span class="nl">"trades"</span><span class="p">:[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"trade_seq"</span><span class="p">:</span><span class="mi">30289730</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"trade_id"</span><span class="p">:</span><span class="s2">"48079573"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1590485535978</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"tick_direction"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"state"</span><span class="p">:</span><span class="s2">"filled"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"reduce_only"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price"</span><span class="p">:</span><span class="mf">8900.0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"post_only"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"order_type"</span><span class="p">:</span><span class="s2">"limit"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"order_id"</span><span class="p">:</span><span class="s2">"4009043192"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"matching_id"</span><span class="p">:</span><span class="s2">"None"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="mf">8895.19</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"liquidity"</span><span class="p">:</span><span class="s2">"M"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="s2">"BTC-PERPETUAL"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_price"</span><span class="p">:</span><span class="mf">8900.45</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fee_currency"</span><span class="p">:</span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fee"</span><span class="p">:</span><span class="mf">-0.00561798</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"direction"</span><span class="p">:</span><span class="s2">"sell"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"block_trade_id"</span><span class="p">:</span><span class="s2">"6165"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"amount"</span><span class="p">:</span><span class="mf">200000.0</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"underlying_price"</span><span class="p">:</span><span class="mf">8902.86</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"trade_seq"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"trade_id"</span><span class="p">:</span><span class="s2">"48079574"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1590485535979</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"tick_direction"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"state"</span><span class="p">:</span><span class="s2">"filled"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"reduce_only"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"price"</span><span class="p">:</span><span class="mf">0.0133</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"post_only"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"order_type"</span><span class="p">:</span><span class="s2">"limit"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"order_id"</span><span class="p">:</span><span class="s2">"4009043194"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"matching_id"</span><span class="p">:</span><span class="s2">"None"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="mf">0.01831619</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"liquidity"</span><span class="p">:</span><span class="s2">"M"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"iv"</span><span class="p">:</span><span class="mf">62.44</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="s2">"BTC-28MAY20-9000-C"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_price"</span><span class="p">:</span><span class="mf">8900.45</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fee_currency"</span><span class="p">:</span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fee"</span><span class="p">:</span><span class="mf">0.002</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"direction"</span><span class="p">:</span><span class="s2">"sell"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"block_trade_id"</span><span class="p">:</span><span class="s2">"6165"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"amount"</span><span class="p">:</span><span class="mf">5.0</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="mi">1590485535980</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"6165"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div>
+<p>Creates block trade<br/><br/>The whole request have to be exact the same as in <code>private/verify_block_trade</code>, only <code>role</code> field should be set appropriately - it basically means that both sides have to agree on the same <code>timestamp</code>, <code>nonce</code>, <code>trades</code> fields and server will assure that <code>role</code> field is different between sides (each party accepted own role).<br/><br/>Using the same <code>timestamp</code> and <code>nonce</code> by both sides in <code>private/verify_block_trade</code> assures that even if unintentionally both sides execute given block trade with valid <code>counterparty_signature</code>, the given block trade will be executed only once.<br/><br/><strong>Note:</strong> In the API, the <code>direction</code> field is always expressed from the maker's perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a "sell put" (maker's perspective), and you will be verifying and accepting a "sell put" block trade.<br/><br/><strong>📖 Related Support Article:</strong> <a href="https://support.deribit.com/hc/en-us/articles/25944688627229-Block-Trading">Block Trading</a></p>
+<p><strong>Scope: </strong> <code>block_trade:read_write</code></p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fexecute_block_trade" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div><div>  This is a matching engine method.</div></aside>
+<h3 id="parameters-95">Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>timestamp</td>
+<td>true</td>
+<td>integer</td>
+<td></td>
+<td>Timestamp, shared with other party (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>nonce</td>
+<td>true</td>
+<td>string</td>
+<td></td>
+<td>Nonce, shared with other party</td>
+</tr>
+<tr>
+<td>role</td>
+<td>true</td>
+<td>string</td>
+<td><code>maker</code><br/><code>taker</code></td>
+<td>Describes if user wants to be maker or taker of trades</td>
+</tr>
+<tr>
+<td>trades</td>
+<td>true</td>
+<td>array of objects</td>
+<td></td>
+<td>List of trades for block trade</td>
+</tr>
+<tr>
+<td>  ›  instrument_name</td>
+<td>true</td>
+<td>string</td>
+<td></td>
+<td>Instrument name</td>
+</tr>
+<tr>
+<td>  ›  price</td>
+<td>true</td>
+<td>number</td>
+<td></td>
+<td>Price for trade</td>
+</tr>
+<tr>
+<td>  ›  amount</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>  ›  direction</td>
+<td>true</td>
+<td>string</td>
+<td><code>buy</code><br/><code>sell</code></td>
+<td>Direction of trade from the maker perspective</td>
+</tr>
+<tr>
+<td>counterparty_signature</td>
+<td>true</td>
+<td>string</td>
+<td></td>
+<td>Signature of block trade generated by <code>private/verify_block_trade_method</code></td>
+</tr>
+</tbody></table>
+<h3 id="response-95">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The id that was sent in the request</td>
+</tr>
+<tr>
+<td>jsonrpc</td>
+<td>string</td>
+<td>The JSON-RPC version (2.0)</td>
+</tr>
+<tr>
+<td>result</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  app_name</td>
+<td>string</td>
+<td>The name of the application that executed the block trade on behalf of the user (optional).</td>
+</tr>
+<tr>
+<td>  ›  broker_code</td>
+<td>string</td>
+<td>Broker code associated with the broker block trade.</td>
+</tr>
+<tr>
+<td>  ›  broker_name</td>
+<td>string</td>
+<td>Name of the broker associated with the block trade.</td>
+</tr>
+<tr>
+<td>  ›  id</td>
+<td>string</td>
+<td>Block trade id</td>
+</tr>
+<tr>
+<td>  ›  timestamp</td>
+<td>integer</td>
+<td>The timestamp (milliseconds since the Unix epoch)</td>
+</tr>
+<tr>
+<td>  ›  trades</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›  trade_id</td>
+<td>string</td>
+<td>Unique (per currency) trade identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  tick_direction</td>
+<td>integer</td>
+<td>Direction of the "tick" (<code>0</code> = Plus Tick, <code>1</code> = Zero-Plus Tick, <code>2</code> = Minus Tick, <code>3</code> = Zero-Minus Tick).</td>
+</tr>
+<tr>
+<td>  ›    ›  fee_currency</td>
+<td>string</td>
+<td>Currency, i.e <code>"BTC"</code>, <code>"ETH"</code>, <code>"USDC"</code></td>
+</tr>
+<tr>
+<td>  ›    ›  api</td>
+<td>boolean</td>
+<td><code>true</code> if user order was created with API</td>
+</tr>
+<tr>
+<td>  ›    ›  advanced</td>
+<td>string</td>
+<td>Advanced type of user order: <code>"usd"</code> or <code>"implv"</code> (only for options; omitted if not applicable)</td>
+</tr>
+<tr>
+<td>  ›    ›  order_id</td>
+<td>string</td>
+<td>Id of the user order (maker or taker), i.e. subscriber's order id that took part in the trade</td>
+</tr>
+<tr>
+<td>  ›    ›  liquidity</td>
+<td>string</td>
+<td>Describes what was role of users order: <code>"M"</code> when it was maker order, <code>"T"</code> when it was taker order</td>
+</tr>
+<tr>
+<td>  ›    ›  post_only</td>
+<td>string</td>
+<td><code>true</code> if user order is post-only</td>
+</tr>
+<tr>
+<td>  ›    ›  direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>  ›    ›  contracts</td>
+<td>number</td>
+<td>Trade size in contract units (optional, may be absent in historical trades)</td>
+</tr>
+<tr>
+<td>  ›    ›  mmp</td>
+<td>boolean</td>
+<td><code>true</code> if user order is MMP</td>
+</tr>
+<tr>
+<td>  ›    ›  fee</td>
+<td>number</td>
+<td>User's fee in units of the specified <code>fee_currency</code></td>
+</tr>
+<tr>
+<td>  ›    ›  quote_id</td>
+<td>string</td>
+<td>QuoteID of the user order (optional, present only for orders placed with <code>private/mass_quote</code>)</td>
+</tr>
+<tr>
+<td>  ›    ›  index_price</td>
+<td>number</td>
+<td>Index Price at the moment of trade</td>
+</tr>
+<tr>
+<td>  ›    ›  label</td>
+<td>string</td>
+<td>User defined label (presented only when previously set for order by user)</td>
+</tr>
+<tr>
+<td>  ›    ›  block_trade_id</td>
+<td>string</td>
+<td>Block trade id - when trade was part of a block trade</td>
+</tr>
+<tr>
+<td>  ›    ›  price</td>
+<td>number</td>
+<td>Price in base currency</td>
+</tr>
+<tr>
+<td>  ›    ›  combo_id</td>
+<td>string</td>
+<td>Optional field containing combo instrument name if the trade is a combo trade</td>
+</tr>
+<tr>
+<td>  ›    ›  matching_id</td>
+<td>string</td>
+<td>Always <code>null</code></td>
+</tr>
+<tr>
+<td>  ›    ›  order_type</td>
+<td>string</td>
+<td>Order type: <code>"limit</code>, <code>"market"</code>, or <code>"liquidation"</code></td>
+</tr>
+<tr>
+<td>  ›    ›  trade_allocations</td>
+<td>array of <em>object</em></td>
+<td>List of allocations for Block RFQ pre-allocation. Each allocation specifies <code>user_id</code>, <code>amount</code>, and <code>fee</code> for the allocated part of the trade. For broker client allocations, a <code>client_info</code> object will be included.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  amount</td>
+<td>number</td>
+<td>Amount allocated to this user.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  client_info</td>
+<td><em>object</em></td>
+<td>Optional client allocation info for brokers.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›    ›  client_id</td>
+<td>integer</td>
+<td>ID of a client; available to broker. Represents a group of users under a common name.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›    ›  client_link_id</td>
+<td>integer</td>
+<td>ID assigned to a single user in a client; available to broker.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›    ›  name</td>
+<td>string</td>
+<td>Name of the linked user within the client; available to broker.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  fee</td>
+<td>number</td>
+<td>Fee for the allocated part of the trade.</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  user_id</td>
+<td>integer</td>
+<td>User ID to which part of the trade is allocated. For brokers the User ID is obstructed.</td>
+</tr>
+<tr>
+<td>  ›    ›  profit_loss</td>
+<td>number</td>
+<td>Profit and loss in base currency.</td>
+</tr>
+<tr>
+<td>  ›    ›  timestamp</td>
+<td>integer</td>
+<td>The timestamp of the trade (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>  ›    ›  iv</td>
+<td>number</td>
+<td>Option implied volatility for the price (Option only)</td>
+</tr>
+<tr>
+<td>  ›    ›  state</td>
+<td>string</td>
+<td>Order state: <code>"open"</code>, <code>"filled"</code>, <code>"rejected"</code>, <code>"cancelled"</code>, <code>"untriggered"</code> or <code>"archive"</code> (if order was archived)</td>
+</tr>
+<tr>
+<td>  ›    ›  underlying_price</td>
+<td>number</td>
+<td>Underlying price for implied volatility calculations (Options only)</td>
+</tr>
+<tr>
+<td>  ›    ›  block_rfq_quote_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ quote - when trade was part of the Block RFQ</td>
+</tr>
+<tr>
+<td>  ›    ›  quote_set_id</td>
+<td>string</td>
+<td>QuoteSet of the user order (optional, present only for orders placed with <code>private/mass_quote</code>)</td>
+</tr>
+<tr>
+<td>  ›    ›  mark_price</td>
+<td>number</td>
+<td>Mark Price at the moment of trade</td>
+</tr>
+<tr>
+<td>  ›    ›  block_rfq_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ - when trade was part of the Block RFQ</td>
+</tr>
+<tr>
+<td>  ›    ›  combo_trade_id</td>
+<td>number</td>
+<td>Optional field containing combo trade identifier if the trade is a combo trade</td>
+</tr>
+<tr>
+<td>  ›    ›  reduce_only</td>
+<td>string</td>
+<td><code>true</code> if user order is reduce-only</td>
+</tr>
+<tr>
+<td>  ›    ›  amount</td>
+<td>number</td>
+<td>Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>  ›    ›  liquidation</td>
+<td>string</td>
+<td>Optional field (only for trades caused by liquidation): <code>"M"</code> when maker side of trade was under liquidation, <code>"T"</code> when taker side was under liquidation, <code>"MT"</code> when both sides of trade were under liquidation</td>
+</tr>
+<tr>
+<td>  ›    ›  trade_seq</td>
+<td>integer</td>
+<td>The sequence number of the trade within instrument</td>
+</tr>
+<tr>
+<td>  ›    ›  risk_reducing</td>
+<td>boolean</td>
+<td><code>true</code> if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)</td>
+</tr>
+<tr>
+<td>  ›    ›  instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>  ›    ›  legs</td>
+<td>array</td>
+<td>Optional field containing leg trades if trade is a combo trade (present when querying for <strong>only</strong> combo trades and in <code>combo_trades</code> events)</td>
+</tr>
+</tbody></table>

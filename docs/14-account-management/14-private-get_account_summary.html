@@ -1,0 +1,558 @@
+<h2 id="private-get_account_summary">/private/get_account_summary</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/get_account_summary?currency=BTC&amp;extended=true"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+<span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">2515</span><span class="p">,</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">private/get_account_summary</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:{</span><span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">extended</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">}};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// ------------------- </span>
+    <span class="c1">// Before sending message, make sure that your connection</span>
+    <span class="c1">// is authenticated (use public/auth call before) </span>
+    <span class="c1">// ------------------- </span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+<span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="mi">2515</span><span class="p">,</span><span class="s">"jsonrpc"</span><span class="p">:</span><span class="s">"2.0"</span><span class="p">,</span><span class="s">"method"</span><span class="p">:</span><span class="s">"private/get_account_summary"</span><span class="p">,</span><span class="s">"params"</span><span class="p">:{</span><span class="s">"currency"</span><span class="p">:</span><span class="s">"BTC"</span><span class="p">,</span><span class="s">"extended"</span><span class="p">:</span><span class="bp">True</span><span class="p">}}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="c1">###############
+</span>       <span class="c1"># Before sending message, make sure that your connection
+</span>       <span class="c1"># is authenticated (use public/auth call before) 
+</span>       <span class="c1">###############
+</span>       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2515</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"delta_total_map"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"btc_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">31.594357699</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"margin_balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">302.62729214</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"futures_session_rpl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.03258105</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"options_session_rpl"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"estimated_liquidation_ratio_map"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"btc_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1009872222854525</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"session_upl"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05271555</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a class="__cf_email__" data-cfemail="9de8eef8efddf8e5fcf0edf1f8b3fef2f0" href="/cdn-cgi/l/email-protection">[email protected]</a>"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"system_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"interuser_transfers_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"estimated_liquidation_ratio"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.10098722</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"options_gamma_map"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"btc_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00001</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"options_vega"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0858</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"options_value"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.0086</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"available_withdrawal_funds"</span><span class="p">:</span><span class="w"> </span><span class="mf">301.35396172</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"projected_delta_total"</span><span class="p">:</span><span class="w"> </span><span class="mf">32.613978</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"maintenance_margin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.8857841</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"total_pl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.33084225</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"limits"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"limits_per_currency"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"non_matching_engine"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"burst"</span><span class="p">:</span><span class="w"> </span><span class="mi">1500</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"matching_engine"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"trading"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"total"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"burst"</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"spot"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"burst"</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"quotes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"burst"</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"max_quotes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"burst"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"guaranteed_quotes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"burst"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"cancel_all"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"burst"</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"options_theta_map"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"btc_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">15.97071</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"projected_maintenance_margin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.7543841</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"available_funds"</span><span class="p">:</span><span class="w"> </span><span class="mf">301.38059622</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"login_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"options_delta"</span><span class="p">:</span><span class="w"> </span><span class="mf">-1.01962</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">302.60065765</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"security_keys_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"referrer_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"mmp_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"equity"</span><span class="p">:</span><span class="w"> </span><span class="mf">302.61869214</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"block_rfq_self_match_prevention"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"futures_session_upl"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05921555</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fee_balance"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"options_session_upl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.0065</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"projected_initial_margin"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.01529592</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"options_theta"</span><span class="p">:</span><span class="w"> </span><span class="mf">15.97071</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"creation_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1687352432143</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"self_trading_extended_to_subaccounts"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"portfolio_margining_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"cross_collateral_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"margin_model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"segregated_sm"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"options_vega_map"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"btc_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0858</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"futures_pl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.32434225</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"options_pl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.0065</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"self_trading_reject_mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cancel_maker"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"initial_margin"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.24669592</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"spot_reserve"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"delta_total"</span><span class="p">:</span><span class="w"> </span><span class="mf">31.602958</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"options_gamma"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00001</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"session_rpl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.03258105</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fees"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00035</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.0001</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"perpetual"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"relative"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.625</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.625</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.625</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"option"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00035</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.0001</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"future"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div>
+<p>Retrieves user account summary. To read subaccount summary use <code>subaccount_id</code> parameter.</p>
+<p><strong>Scope: </strong> <code>account:read</code></p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_account_summary" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div></aside>
+<h3 id="parameters-153">Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency</td>
+<td>true</td>
+<td>string</td>
+<td><code>BTC</code><br/><code>ETH</code><br/><code>STETH</code><br/><code>ETHW</code><br/><code>USDC</code><br/><code>USDT</code><br/><code>EURR</code><br/><code>MATIC</code><br/><code>SOL</code><br/><code>XRP</code><br/><code>USYC</code><br/><code>PAXG</code><br/><code>BNB</code><br/><code>USDE</code></td>
+<td>The currency symbol</td>
+</tr>
+<tr>
+<td>subaccount_id</td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+<td>The user id for the subaccount</td>
+</tr>
+<tr>
+<td>extended</td>
+<td>false</td>
+<td>boolean</td>
+<td></td>
+<td>Include additional fields</td>
+</tr>
+</tbody></table>
+<h3 id="response-153">Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The id that was sent in the request</td>
+</tr>
+<tr>
+<td>jsonrpc</td>
+<td>string</td>
+<td>The JSON-RPC version (2.0)</td>
+</tr>
+<tr>
+<td>result</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  options_pl</td>
+<td>number</td>
+<td>Options profit and Loss</td>
+</tr>
+<tr>
+<td>  ›  projected_delta_total</td>
+<td>number</td>
+<td>The sum of position deltas without positions that will expire during closest expiration</td>
+</tr>
+<tr>
+<td>  ›  options_theta_map</td>
+<td>object</td>
+<td>Map of options' thetas per index</td>
+</tr>
+<tr>
+<td>  ›  has_non_block_chain_equity</td>
+<td>boolean</td>
+<td>Optional field returned with value <code>true</code> when user has non block chain equity that is excluded from proof of reserve calculations</td>
+</tr>
+<tr>
+<td>  ›  total_margin_balance_usd</td>
+<td>number</td>
+<td>Optional (only for users using cross margin). The account's total margin balance in all cross collateral currencies, expressed in USD</td>
+</tr>
+<tr>
+<td>  ›  limits</td>
+<td>object</td>
+<td>Returned object is described in <a href="https://support.deribit.com/hc/en-us/articles/25944617523357-Rate-Limits">separate document</a>.</td>
+</tr>
+<tr>
+<td>  ›  type</td>
+<td>string</td>
+<td>Account type (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  total_delta_total_usd</td>
+<td>number</td>
+<td>Optional (only for users using cross margin). The account's total delta total in all cross collateral currencies, expressed in USD</td>
+</tr>
+<tr>
+<td>  ›  available_withdrawal_funds</td>
+<td>number</td>
+<td>The account's available to withdrawal funds</td>
+</tr>
+<tr>
+<td>  ›  options_session_rpl</td>
+<td>number</td>
+<td>Options session realized profit and Loss</td>
+</tr>
+<tr>
+<td>  ›  futures_session_rpl</td>
+<td>number</td>
+<td>Futures session realized profit and Loss</td>
+</tr>
+<tr>
+<td>  ›  total_pl</td>
+<td>number</td>
+<td>Profit and loss</td>
+</tr>
+<tr>
+<td>  ›  spot_reserve</td>
+<td>number</td>
+<td>The account's balance reserved in active spot orders</td>
+</tr>
+<tr>
+<td>  ›  fees</td>
+<td>array of <em>object</em></td>
+<td>List of fee objects for all currency pairs and instrument types related to the currency (available when parameter <code>extended</code> = <code>true</code> and user has any discounts)</td>
+</tr>
+<tr>
+<td>  ›    ›  index_name</td>
+<td>string</td>
+<td>The currency pair this fee applies to</td>
+</tr>
+<tr>
+<td>  ›    ›  kind</td>
+<td>string</td>
+<td>Type of the instruments the fee applies to - <code>future</code> for future instruments (excluding perpetual), <code>perpetual</code> for future perpetual instruments, <code>option</code> for options</td>
+</tr>
+<tr>
+<td>  ›    ›  value</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›    ›  block_trade</td>
+<td>number</td>
+<td>Block trade fee (if applicable)</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  default</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›    ›    ›    ›  maker</td>
+<td>number</td>
+<td>Maker fee</td>
+</tr>
+<tr>
+<td>  ›    ›    ›    ›  taker</td>
+<td>number</td>
+<td>Taker fee</td>
+</tr>
+<tr>
+<td>  ›    ›    ›    ›  type</td>
+<td>string</td>
+<td>Fee type - <code>relative</code> if fee is calculated as a fraction of base instrument fee, <code>fixed</code> if fee is calculated solely using user fee</td>
+</tr>
+<tr>
+<td>  ›    ›    ›  settlement</td>
+<td>number</td>
+<td>Settlement fee</td>
+</tr>
+<tr>
+<td>  ›  additional_reserve</td>
+<td>number</td>
+<td>The account's balance reserved in other orders</td>
+</tr>
+<tr>
+<td>  ›  options_session_upl</td>
+<td>number</td>
+<td>Options session unrealized profit and Loss</td>
+</tr>
+<tr>
+<td>  ›  cross_collateral_enabled</td>
+<td>boolean</td>
+<td>When <code>true</code> cross collateral is enabled for user</td>
+</tr>
+<tr>
+<td>  ›  id</td>
+<td>integer</td>
+<td>Account id (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  options_value</td>
+<td>number</td>
+<td>Options value</td>
+</tr>
+<tr>
+<td>  ›  creation_timestamp</td>
+<td>integer</td>
+<td>Time at which the account was created (milliseconds since the Unix epoch; available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  email</td>
+<td>string</td>
+<td>User email (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  options_vega_map</td>
+<td>object</td>
+<td>Map of options' vegas per index</td>
+</tr>
+<tr>
+<td>  ›  maintenance_margin</td>
+<td>number</td>
+<td>The maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency's value to the given currency, using each cross collateral currency's index.</td>
+</tr>
+<tr>
+<td>  ›  mmp_enabled</td>
+<td>boolean</td>
+<td>Whether MMP is enabled (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  futures_session_upl</td>
+<td>number</td>
+<td>Futures session unrealized profit and Loss</td>
+</tr>
+<tr>
+<td>  ›  portfolio_margining_enabled</td>
+<td>boolean</td>
+<td><code>true</code> when portfolio margining is enabled for user</td>
+</tr>
+<tr>
+<td>  ›  futures_pl</td>
+<td>number</td>
+<td>Futures profit and Loss</td>
+</tr>
+<tr>
+<td>  ›  options_gamma_map</td>
+<td>object</td>
+<td>Map of options' gammas per index</td>
+</tr>
+<tr>
+<td>  ›  currency</td>
+<td>string</td>
+<td>The selected currency</td>
+</tr>
+<tr>
+<td>  ›  options_delta</td>
+<td>number</td>
+<td>Options summary delta</td>
+</tr>
+<tr>
+<td>  ›  initial_margin</td>
+<td>number</td>
+<td>The account's initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency's value to the given currency, using each cross collateral currency's index.</td>
+</tr>
+<tr>
+<td>  ›  projected_maintenance_margin</td>
+<td>number</td>
+<td>Projected maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency's value to the given currency, using each cross collateral currency's index.</td>
+</tr>
+<tr>
+<td>  ›  available_funds</td>
+<td>number</td>
+<td>The account's available funds. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency's value to the given currency, using each cross collateral currency's index.</td>
+</tr>
+<tr>
+<td>  ›  referrer_id</td>
+<td>string</td>
+<td>Optional identifier of the referrer (of the affiliation program, and available when parameter <code>extended</code> = <code>true</code>), which link was used by this account at registration. It coincides with suffix of the affiliation link path after <code>/reg-</code></td>
+</tr>
+<tr>
+<td>  ›  login_enabled</td>
+<td>boolean</td>
+<td>Whether account is loginable using email and password (available when parameter <code>extended</code> = <code>true</code> and account is a subaccount)</td>
+</tr>
+<tr>
+<td>  ›  equity</td>
+<td>number</td>
+<td>The account's current equity</td>
+</tr>
+<tr>
+<td>  ›  margin_model</td>
+<td>string</td>
+<td>Name of user's currently enabled margin model</td>
+</tr>
+<tr>
+<td>  ›  balance</td>
+<td>number</td>
+<td>The account's balance</td>
+</tr>
+<tr>
+<td>  ›  session_upl</td>
+<td>number</td>
+<td>Session unrealized profit and loss</td>
+</tr>
+<tr>
+<td>  ›  margin_balance</td>
+<td>number</td>
+<td>The account's margin balance. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency's value to the given currency, using each cross collateral currency's index.</td>
+</tr>
+<tr>
+<td>  ›  security_keys_enabled</td>
+<td>boolean</td>
+<td>Whether Security Key authentication is enabled (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  deposit_address</td>
+<td>string</td>
+<td>The deposit address for the account (if available)</td>
+</tr>
+<tr>
+<td>  ›  options_theta</td>
+<td>number</td>
+<td>Options summary theta</td>
+</tr>
+<tr>
+<td>  ›  self_trading_extended_to_subaccounts</td>
+<td>string</td>
+<td><code>true</code> if self trading rejection behavior is applied to trades between subaccounts (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  interuser_transfers_enabled</td>
+<td>boolean</td>
+<td><code>true</code> when the inter-user transfers are enabled for user (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  total_initial_margin_usd</td>
+<td>number</td>
+<td>Optional (only for users using cross margin). The account's total initial margin in all cross collateral currencies, expressed in USD</td>
+</tr>
+<tr>
+<td>  ›  estimated_liquidation_ratio</td>
+<td>number</td>
+<td>Estimated Liquidation Ratio is returned only for users without portfolio margining enabled. Multiplying it by future position's market price returns its estimated liquidation price. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency's value to the given currency, using each cross collateral currency's index.</td>
+</tr>
+<tr>
+<td>  ›  session_rpl</td>
+<td>number</td>
+<td>Session realized profit and loss</td>
+</tr>
+<tr>
+<td>  ›  fee_balance</td>
+<td>number</td>
+<td>The account's fee balance (it can be used to pay for fees)</td>
+</tr>
+<tr>
+<td>  ›  total_maintenance_margin_usd</td>
+<td>number</td>
+<td>Optional (only for users using cross margin). The account's total maintenance margin in all cross collateral currencies, expressed in USD</td>
+</tr>
+<tr>
+<td>  ›  options_vega</td>
+<td>number</td>
+<td>Options summary vega</td>
+</tr>
+<tr>
+<td>  ›  projected_initial_margin</td>
+<td>number</td>
+<td>Projected initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency's value to the given currency, using each cross collateral currency's index.</td>
+</tr>
+<tr>
+<td>  ›  self_trading_reject_mode</td>
+<td>string</td>
+<td>Self trading rejection behavior - <code>reject_taker</code> or <code>cancel_maker</code> (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  system_name</td>
+<td>string</td>
+<td>System generated user nickname (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  options_gamma</td>
+<td>number</td>
+<td>Options summary gamma</td>
+</tr>
+<tr>
+<td>  ›  username</td>
+<td>string</td>
+<td>Account name (given by user) (available when parameter <code>extended</code> = <code>true</code>)</td>
+</tr>
+<tr>
+<td>  ›  total_equity_usd</td>
+<td>number</td>
+<td>Optional (only for users using cross margin). The account's total equity in all cross collateral currencies, expressed in USD</td>
+</tr>
+<tr>
+<td>  ›  delta_total</td>
+<td>number</td>
+<td>The sum of position deltas</td>
+</tr>
+</tbody></table>
