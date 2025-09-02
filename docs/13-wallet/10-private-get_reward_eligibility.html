@@ -1,8 +1,8 @@
-<h2 id="private-delete_address_beneficiary">/private/delete_address_beneficiary</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/delete_address_beneficiary?address=bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf0uyj&amp;currency=BTC"</span> <span class="se">\</span>
+<h2 id="private-get_reward_eligibility">/private/get_reward_eligibility</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/get_reward_eligibility?"</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
-<span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">42</span><span class="p">,</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">private/delete_address_beneficiary</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:{</span><span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf0uyj</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">}};</span>
+<span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">private/get_reward_eligibility</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:{}};</span>
 <span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
 <span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// do something with the response...</span>
@@ -20,7 +20,7 @@
 <span class="kn">import</span> <span class="nn">json</span>
 
 <span class="n">msg</span> <span class="o">=</span> \
-<span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="mi">42</span><span class="p">,</span><span class="s">"jsonrpc"</span><span class="p">:</span><span class="s">"2.0"</span><span class="p">,</span><span class="s">"method"</span><span class="p">:</span><span class="s">"private/delete_address_beneficiary"</span><span class="p">,</span><span class="s">"params"</span><span class="p">:{</span><span class="s">"address"</span><span class="p">:</span><span class="s">"bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf0uyj"</span><span class="p">,</span><span class="s">"currency"</span><span class="p">:</span><span class="s">"BTC"</span><span class="p">}}</span>
+<span class="p">{</span><span class="s">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s">"jsonrpc"</span><span class="p">:</span><span class="s">"2.0"</span><span class="p">,</span><span class="s">"method"</span><span class="p">:</span><span class="s">"private/get_reward_eligibility"</span><span class="p">,</span><span class="s">"params"</span><span class="p">:{}}</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
    <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
@@ -41,47 +41,35 @@
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ok"</span><span class="w">
-</span><span class="p">}</span><span class="w"> 
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"usdc"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"eligibility_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"non_eligible"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"apr_sma7"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"usde"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"eligibility_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eligible"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"apr_sma7"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"buidl"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"eligibility_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eligible"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"apr_sma7"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.943606</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"steth"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"eligibility_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eligible"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"apr_sma7"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.692285714285714</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
 </span></code></pre></div>
-<p>Deletes address beneficiary information</p>
-<p><strong>Scope: </strong> <code>wallet:read_write</code></p>
-<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fdelete_address_beneficiary" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
+<p>Returns reward eligibility status and APR data for all supported currencies.</p>
+<p><strong>📖 Related Support Article:</strong> <a href="https://support.deribit.com/hc/en-us/articles/26525792475677-Yield-reward-bearing-coins">Yield reward-bearing coins</a></p>
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_reward_eligibility" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
 <aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id="parameters-123">Parameters</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Required</th>
-<th>Type</th>
-<th>Enum</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>currency</td>
-<td>true</td>
-<td>string</td>
-<td><code>BTC</code><br/><code>ETH</code><br/><code>STETH</code><br/><code>ETHW</code><br/><code>USDC</code><br/><code>USDT</code><br/><code>EURR</code><br/><code>MATIC</code><br/><code>SOL</code><br/><code>XRP</code><br/><code>USYC</code><br/><code>PAXG</code><br/><code>BNB</code><br/><code>USDE</code></td>
-<td>The currency symbol</td>
-</tr>
-<tr>
-<td>address</td>
-<td>true</td>
-<td>string</td>
-<td></td>
-<td>Address in currency format</td>
-</tr>
-<tr>
-<td>tag</td>
-<td>false</td>
-<td>string</td>
-<td></td>
-<td>Tag for XRP addresses</td>
-</tr>
-</tbody></table>
-<h3 id="response-123">Response</h3>
+<h3 id="parameters-128">Parameters</h3>
+<p><em>This method takes no parameters</em></p>
+<h3 id="response-128">Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -101,7 +89,17 @@
 </tr>
 <tr>
 <td>result</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>  ›  apr_sma7</td>
+<td>number</td>
+<td>Simple Moving Average (SMA) of the last 7 days of rewards for the currency</td>
+</tr>
+<tr>
+<td>  ›  eligibility_status</td>
 <td>string</td>
-<td>ok</td>
+<td><ul> <li><code>eligible</code>: User can get reward for specific currency for all its equity</li> <li><code>partially_eligible</code>: User can get reward for specific currency, but custody balance is excluded</li> <li><code>non_eligible</code>: User can not get reward for specific currency</li> </ul></td>
 </tr>
 </tbody></table>

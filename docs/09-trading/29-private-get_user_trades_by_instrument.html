@@ -93,7 +93,6 @@
 
 </span></code></pre></div>
 <p>Retrieve the latest user trades that have occurred for a specific instrument.</p>
-<p><strong>📖 Related Support Article:</strong> <a href="https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API">Accessing historical trades and orders using API</a></p>
 <p><strong>Scope: </strong> <code>trade:read</code></p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_user_trades_by_instrument" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
 <aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div></aside>
@@ -133,7 +132,7 @@
 <td>false</td>
 <td>integer</td>
 <td></td>
-<td>Number of requested items, default - <code>10</code></td>
+<td>Number of requested items, default - <code>10</code>, maximum - <code>1000</code></td>
 </tr>
 <tr>
 <td>start_timestamp</td>
@@ -154,7 +153,7 @@
 <td>false</td>
 <td>boolean</td>
 <td></td>
-<td><p>Determines whether historical trade and order records should be retrieved.</p> <ul> <li><code>false</code> (default): Returns recent records: orders for 30 min, trades for 24h.</li> <li><code>true</code>: Fetches historical records, available after a short delay due to indexing. Recent data is not included.</li> </ul></td>
+<td><p>Determines whether historical trade and order records should be retrieved.</p> <ul> <li><code>false</code> (default): Returns recent records: orders for 30 min, trades for 24h.</li> <li><code>true</code>: Fetches historical records, available after a short delay due to indexing. Recent data is not included.</li> </ul> <strong>📖 Related Support Article:</strong> <a href="https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API">Accessing historical trades and orders using API</a></td>
 </tr>
 <tr>
 <td>sorting</td>

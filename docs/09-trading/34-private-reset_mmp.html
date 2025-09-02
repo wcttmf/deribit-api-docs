@@ -45,7 +45,9 @@
 </span><span class="p">}</span><span class="w">
 
 </span></code></pre></div>
-<p>Reset MMP</p>
+<p>Reset Market Maker Protection (MMP) limits for the specified currency pair or group.
+<br/>
+<strong>📖 Related Support Article:</strong> <a href="https://support.deribit.com/hc/en-us/articles/27308287203357-Market-Maker-Protection-API-Configuration">Market Maker Protection API Configuration</a></p>
 <p><strong>Scope: </strong> <code>trade:read_write</code> or <code>block_rfq:read_write</code> (when <code>block_rfq</code> = <code>true</code>)</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Freset_mmp" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
 <aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div><div>  This is a matching engine method.</div></aside>
@@ -63,8 +65,8 @@
 <td>index_name</td>
 <td>true</td>
 <td>string</td>
-<td><code>btc_usd</code><br/><code>eth_usd</code><br/><code>btc_usdc</code><br/><code>eth_usdc</code><br/><code>ada_usdc</code><br/><code>algo_usdc</code><br/><code>avax_usdc</code><br/><code>bch_usdc</code><br/><code>bnb_usdc</code><br/><code>doge_usdc</code><br/><code>dot_usdc</code><br/><code>link_usdc</code><br/><code>ltc_usdc</code><br/><code>near_usdc</code><br/><code>paxg_usdc</code><br/><code>shib_usdc</code><br/><code>sol_usdc</code><br/><code>ton_usdc</code><br/><code>trx_usdc</code><br/><code>trump_usdc</code><br/><code>uni_usdc</code><br/><code>xrp_usdc</code><br/><code>usde_usdc</code><br/><code>buidl_usdc</code><br/><code>btcdvol_usdc</code><br/><code>ethdvol_usdc</code><br/><code>btc_usdt</code><br/><code>eth_usdt</code><br/><code>all</code></td>
-<td>Index identifier of derivative instrument on the platform</td>
+<td></td>
+<td>Currency pair for which to reset MMP limits.<br/> <strong>For regular MMP (<code>block_rfq = false</code>):</strong> Must be a specific currency pair (e.g., "btc_usd", "eth_usd"). The value <code>"all"</code> is not allowed.<br/> <strong>For Block RFQ MMP (<code>block_rfq = true</code>):</strong> Can be either a specific currency pair or <code>"all"</code> to reset MMP limits across all currency pairs.</td>
 </tr>
 <tr>
 <td>mmp_group</td>
@@ -78,7 +80,7 @@
 <td>false</td>
 <td>boolean</td>
 <td></td>
-<td>If true, resets MMP for Block RFQ. When set, requires <code>block_rfq</code> scope instead of <code>trade</code> scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.</td>
+<td>If true, resets MMP for Block RFQ. When set, requires <code>block_rfq</code> scope instead of <code>trade</code> scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings. When <code>block_rfq = true</code>, the <code>index_name</code> parameter can be set to <code>"all"</code> to reset limits across all currency pairs.</td>
 </tr>
 </tbody></table>
 <h3 id="response-84">Response</h3>

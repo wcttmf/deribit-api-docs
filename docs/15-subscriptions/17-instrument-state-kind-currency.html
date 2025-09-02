@@ -94,7 +94,7 @@
 <tr>
 <td>  ›  state</td>
 <td>string</td>
-<td>State of instrument - possible values: <code>created</code>, <code>started</code>, <code>settled</code>, <code>closed</code>, <code>deactivated</code>, <code>terminated</code></td>
+<td>State of instrument - represents the current lifecycle stage of the instrument. <br/><b>State Lifecycle and Meanings:</b> <li><code>created</code>: Initial state when instrument is first created. Represents the very beginning of instrument lifecycle.</li> <li><code>started</code>: When instrument book process is started and ready for trading. Indicates instrument is operational and ready. Can also occur after maintenance restart or combo reactivation.</li> <li><code>settled</code>: Instrument has expired and been settled at final price. Final state after expiration and settlement.</li> <li><code>closed</code>: Instrument is closed/expired but may still have processes running. Intermediate state between active and archived.</li> <li><code>deactivated</code>: Instrument is temporarily disabled (can be reactivated). Temporary suspension of trading.</li> <li><code>terminated</code>: Instrument process has been terminated. Final process termination state. Can occur due to maintenance, after deactivation, or after closure.</li></td>
 </tr>
 <tr>
 <td>  ›  timestamp</td>

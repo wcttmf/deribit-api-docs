@@ -41,7 +41,7 @@
 </span><span class="p">}</span><span class="w">
 
 </span></code></pre></div>
-<p>Unsubscribe from one or more channels.</p>
+<p>Unsubscribe from one or more channels. The response contains only the channels that were successfully unsubscribed in this request.<br/> <strong>Note:</strong> The <code>result</code> field in the response contains only the channels that were successfully processed and unsubscribed from this specific request. It does not include all previously subscribed topics. If a channel in the request is invalid, not subscribed, or fails validation, it will not appear in the result.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fpublic%2Funsubscribe" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
 <h3 id="parameters-15">Parameters</h3>
 <table><thead>
@@ -58,7 +58,7 @@
 <td>true</td>
 <td>array</td>
 <td></td>
-<td>A list of channels to unsubscribe from.</td>
+<td>A list of channels to unsubscribe from. Only successfully unsubscribed channels will be returned in the result.</td>
 </tr>
 </tbody></table>
 <h3 id="response-15">Response</h3>
@@ -72,16 +72,16 @@
 <tr>
 <td>id</td>
 <td>integer</td>
-<td>The id that was sent in the request</td>
+<td></td>
 </tr>
 <tr>
 <td>jsonrpc</td>
 <td>string</td>
-<td>The JSON-RPC version (2.0)</td>
+<td></td>
 </tr>
 <tr>
 <td>result</td>
 <td>array of string</td>
-<td>A list of subscribed channels.</td>
+<td>List of channels that were successfully unsubscribed in this request</td>
 </tr>
 </tbody></table>

@@ -67,6 +67,7 @@
 
 </span></code></pre></div>
 <p>Retrieve the current state of an order.</p>
+<p><strong>Important Note for Mass Quotes:</strong> Quote orders are order-like structures that don't fully translate to normal orders. When checking order state for quotes, the <code>amount</code> field represents the remaining amount, not the original order amount.</p>
 <p><strong>Scope: </strong> <code>trade:read</code></p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_order_state" rel="noopener noreferrer" target="_blank">Try in API console</a></p>
 <aside class="multi-notice"><div>  This is a private method; it can only be used after authentication.</div></aside>
@@ -219,7 +220,7 @@
 <tr>
 <td>  ›  mmp_group</td>
 <td>string</td>
-<td>Name of the MMP group supplied in the <code>private/mass_quote</code> request.</td>
+<td>Name of the MMP group supplied in the <code>private/mass_quote</code> request. Only present for quote orders.</td>
 </tr>
 <tr>
 <td>  ›  mmp</td>
@@ -249,7 +250,7 @@
 <tr>
 <td>  ›  quote_id</td>
 <td>string</td>
-<td>The same QuoteID as supplied in the <code>private/mass_quote</code> request.</td>
+<td>The same QuoteID as supplied in the <code>private/mass_quote</code> request. Only present for quote orders.</td>
 </tr>
 <tr>
 <td>  ›  order_state</td>
@@ -339,7 +340,7 @@
 <tr>
 <td>  ›  quote_set_id</td>
 <td>string</td>
-<td>Identifier of the QuoteSet supplied in the <code>private/mass_quote</code> request.</td>
+<td>Identifier of the QuoteSet supplied in the <code>private/mass_quote</code> request. Only present for quote orders.</td>
 </tr>
 <tr>
 <td>  ›  auto_replaced</td>

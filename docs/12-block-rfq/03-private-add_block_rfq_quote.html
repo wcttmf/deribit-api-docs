@@ -189,7 +189,7 @@
 <td>false</td>
 <td>string</td>
 <td><code>all_or_none</code><br/><code>any_part_of</code></td>
-<td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>"all_or_none (AON)"</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. </li> <li><code>"any_part_of (APO)"</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. Additionally, 'any_part_of' quotes have priority over 'all_or_none' quotes at the same price level.</li> </ul></td>
+<td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>"all_or_none (AON)"</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level.</li> <li><code>"any_part_of (APO)"</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount.</li> </ul></td>
 </tr>
 <tr>
 <td>price</td>
